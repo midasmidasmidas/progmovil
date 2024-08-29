@@ -1,2 +1,17 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+
+ion-button {
+    --background: rgb(102, 0, 128);
+    --color:white;
+
+    --border-radius: 0;
+}
+
+.form-centrada {
+    text-align: center;
+    position: absolute;
+    left: 5%;
+    right: 5%;
+    top: 10%;
+}
