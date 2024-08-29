@@ -15,6 +15,18 @@ const routes: Routes = [
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
+  {
+    path: 'cuenta',
+    loadChildren: () => import('./pages/cuenta/cuenta.module').then( m => m.CuentaPageModule)
+  },
+  {
+    path: 'wishlist',
+    loadChildren: () => import('./pages/wishlist/wishlist.module').then( m => m.WishlistPageModule)
+  },
+  {
+    path: '**',
+    loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
+  },
 ];
 
 @NgModule({
