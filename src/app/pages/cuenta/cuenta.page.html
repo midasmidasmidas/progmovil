@@ -14,17 +14,28 @@
             <ion-title size="large">Cuenta</ion-title>
         </ion-toolbar>
     </ion-header>
-    
+
     <ion-list>
         <ion-item>
             <img src="reemplazarLuego/placeholder.png">
-        </ion-item>
-        <ion-item>
-            <h1>NOMBRE DE USUARIO</h1>
+            <h1>Nombre de Usuario</h1>
         </ion-item>
     </ion-list>
 
-    <h1>Historial de Compras</h1>
+    <ion-list>
+        <ion-item>
+            <ion-button [routerLink]="'/wishlist'">
+                <ion-icon slot="end" name="heart"></ion-icon>
+                Listas de Deseados
+            </ion-button>
+            <ion-button [routerLink]="'/wishlist'">
+                <ion-icon slot="end" name="create"></ion-icon>
+                Editar Perfil
+            </ion-button>
+        </ion-item>
+    </ion-list>
+
+    <h1 class="ion-text-center"><b>Historial de Compras</b></h1>
     <ion-list>
         <ion-item>
             <h1>abcdefg</h1>
