@@ -19,24 +19,37 @@
         <img src="assets/img/user.png" style="width:128px;">
         <h1>Nombre de Usuario</h1>
 
-        <ion-item>
-            <ion-button class="boton-azul" [routerLink]="'/cuenta/editar'" size="medium">
-                <ion-icon slot="start" name="create"></ion-icon>
-                Editar Cuenta
-            </ion-button>
-        </ion-item>
-        <ion-item>
-            <ion-button class="boton-azul" [routerLink]="'/cuenta/wishlist'" size="medium">
-                <ion-icon slot="start" name="heart"></ion-icon>
-                Listas de Deseados
-            </ion-button>
-        </ion-item>
-        <ion-item>
-            <ion-button class="boton-azul" [routerLink]="'/cuenta/historial'" size="medium">
-                <ion-icon slot="start" name="cart"></ion-icon>
-                Historial de Compras
-            </ion-button>
-        </ion-item>
+        <h5>Cuenta</h5>
+        <ion-list>
+            <ion-item>
+                <ion-button class="boton-azul" [routerLink]="'/cuenta/editar'" size="medium">
+                    <ion-icon slot="start" name="create"></ion-icon>
+                    Editar Cuenta
+                </ion-button>
+            </ion-item>
+            <ion-item>
+                <ion-button class="boton-azul" [routerLink]="'/cuenta/wishlist'" size="medium">
+                    <ion-icon slot="start" name="heart"></ion-icon>
+                    Listas de Deseados
+                </ion-button>
+            </ion-item>
+            <ion-item>
+                <ion-button class="boton-azul" [routerLink]="'/cuenta/historial'" size="medium">
+                    <ion-icon slot="start" name="cart"></ion-icon>
+                    Historial de Compras
+                </ion-button>
+            </ion-item>
+        </ion-list>
+
+        <h5>Privacidad</h5>
+        <ion-list>
+            <ion-item>
+                <ion-button class="boton-azul" [routerLink]="'/cuenta/password-cambio'" size="medium">
+                    <ion-icon slot="start" name="person"></ion-icon>
+                    Cambiar Contraseña
+                </ion-button>
+            </ion-item>
+        </ion-list>
     </div>
     
 </ion-content>
