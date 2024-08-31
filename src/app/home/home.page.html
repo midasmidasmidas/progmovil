@@ -22,9 +22,9 @@
         <ion-searchbar [debounce]="800" placeholder="Buscar..." show-clear-button="always" clear-icon="trash-bin" class="custom"></ion-searchbar>
         <ion-row *ngFor="let x of productos">
             <ion-col>
-                <ion-item>
+                <ion-item class="producto">
                     <ion-button fill="clear" (click)="irProducto(x)">
-                        <img slot="start" class="img-producto" src="{{x.imagen}}">
+                        <img slot="start" src="{{x.imagen}}">
                     </ion-button>
                     <ion-label class="ion-padding-horizontal">
                             <h2>{{x.nombre}}</h2>

@@ -18,10 +18,10 @@
     <div id="container-alt">
         <ion-row *ngFor="let x of carrito">
             <ion-col>
-                <ion-item>
-                    <img slot="start" class="img-producto" src="{{x.imagen}}">
+                <ion-item class="producto">
+                    <img slot="start" src="{{x.imagen}}">
                     <ion-label class="ion-padding-horizontal">
-                        <h1>{{x.nombre}}</h1>
+                        <h2>{{x.nombre}}</h2>
                         <h3>{{x.marca}}</h3>
                         <p>${{x.precio}}</p>
                     </ion-label>
