@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
     <ion-toolbar>
-        <ion-title>Productos</ion-title>
+        <ion-title>Catálogo</ion-title>
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
             <ion-back-button></ion-back-button>
@@ -22,11 +22,13 @@
         <ion-row *ngFor="let x of productos">
             <ion-col>
                 <ion-item>
-                    <img slot="start" class="img-producto-home" src="{{x.imagen}}">
+                    <ion-button fill="clear" (click)="irProducto(x)">
+                        <img slot="start" class="img-producto-home" src="{{x.imagen}}">
+                    </ion-button>
                     <ion-label class="ion-padding-horizontal">
-                        <h1>{{x.nombre}}</h1>
-                        <h3>{{x.marca}}</h3>
-                        <p>${{x.precio}}</p>
+                            <h1>{{x.nombre}}</h1>
+                            <h3>{{x.marca}}</h3>
+                            <p>${{x.precio}}</p>
                     </ion-label>
                 </ion-item>
             </ion-col>

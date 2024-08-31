@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Component({
     selector: 'app-home',
@@ -34,6 +35,20 @@ export class HomePage {
         },
     ] 
     
-    constructor() {}
+    constructor(private router:Router) {}
+
+    irProducto(x:any)
+    {
+        let navExtras: NavigationExtras = {
+            state:{
+              imagen: x.imagen,
+              nombre: x.nombre,
+              marca: x.marca,
+              precio: x.precio,
+            }
+        }
+
+        this.router.navigate(['/producto'], navExtras);
+    }
     
 }

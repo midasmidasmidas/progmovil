@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-title>{{nombre}}</ion-title>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <ion-header collapse="condense">
+        <ion-toolbar>
+            <ion-title size="large">producto</ion-title>
+        </ion-toolbar>
+    </ion-header>
+    
+    <div id="container-alt">
+        <img style="width: 256px;" src="{{imagen}}">
+        
+        <ion-item class="producto ion-text-center">
+            <ion-label class="ion-padding-horizontal">
+                <h1>{{nombre}}</h1>
+                <h3>{{marca}}</h3>
+                <p>${{precio}}</p>
+            </ion-label>
+        </ion-item>
+        
+        <ion-button class="boton-azul" size="large">Añadir al Carrito</ion-button>
+    </div>
+
+</ion-content>
