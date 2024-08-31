@@ -15,31 +15,28 @@
         </ion-toolbar>
     </ion-header>
 
-    <ion-list>
-        <ion-item>
-            <img src="reemplazarLuego/placeholder.png">
-            <h1>Nombre de Usuario</h1>
-        </ion-item>
-    </ion-list>
+    <div id="container">
+        <img src="assets/img/user.png" style="width:128px;">
+        <h1>Nombre de Usuario</h1>
 
-    <ion-list>
         <ion-item>
-            <ion-button [routerLink]="'/wishlist'">
-                <ion-icon slot="end" name="heart"></ion-icon>
-                Listas de Deseados
-            </ion-button>
-            <ion-button [routerLink]="'/wishlist'">
-                <ion-icon slot="end" name="create"></ion-icon>
+            <ion-button [routerLink]="'/cuenta/editar'" size="medium">
+                <ion-icon slot="start" name="create"></ion-icon>
                 Editar Perfil
             </ion-button>
         </ion-item>
-    </ion-list>
-
-    <h1 class="ion-text-center"><b>Historial de Compras</b></h1>
-    <ion-list>
         <ion-item>
-            <h1>abcdefg</h1>
+            <ion-button [routerLink]="'/cuenta/wishlist'" size="medium">
+                <ion-icon slot="start" name="heart"></ion-icon>
+                Listas de Deseados
+            </ion-button>
         </ion-item>
-    </ion-list>
+        <ion-item>
+            <ion-button [routerLink]="'/cuenta/historial'" size="medium">
+                <ion-icon slot="start" name="cart"></ion-icon>
+                Historial de Compras
+            </ion-button>
+        </ion-item>
+    </div>
     
 </ion-content>
