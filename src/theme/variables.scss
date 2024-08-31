@@ -2,10 +2,15 @@
 // http://ionicframework.com/docs/theming/
 
 ion-button {
-    --background: rgb(102, 0, 128);
+    --background: rgb(0, 42, 104);
     --color:white;
 
     --border-radius: 0;
+}
+
+// cambia el color del texto arriba del input
+ion-input {
+    --ion-color-primary: rgb(164, 241, 255);
 }
 
 .form-centrada {
@@ -14,4 +19,18 @@ ion-button {
     left: 5%;
     right: 5%;
     top: 10%;
+}
+
+* {
+    --background: rgb(6, 21, 37);
+    --ion-item-background: rgb(6, 21, 37);
+    --border-color: rgb(0, 45, 82);
+}
+
+ion-icon {
+    color: rgb(186, 214, 255);
+}
+
+.img-producto-home {
+    width: 96px;
 }
