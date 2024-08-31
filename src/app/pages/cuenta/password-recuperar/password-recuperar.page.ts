@@ -1,15 +1,52 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-password-recuperar',
-  templateUrl: './password-recuperar.page.html',
-  styleUrls: ['./password-recuperar.page.scss'],
+    selector: 'app-password-recuperar',
+    templateUrl: './password-recuperar.page.html',
+    styleUrls: ['./password-recuperar.page.scss'],
 })
 export class PasswordRecuperarPage implements OnInit {
 
-  constructor() { }
+    email:string = "";
+    pass1:string = "";
+    pass2:string = "";
+    
+    constructor(private router:Router, private alertController: AlertController) { }
+    
+    ngOnInit() {
+    }
+    
+    validarPassword() {
+        if(this.email == "" || this.pass1 == "" || this.pass2 == "") {
+            this.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
+            return;
+        }
 
-  ngOnInit() {
-  }
+        const regex = /^(?=.*\d)(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
+        if(!regex.test(this.pass1)) {
+            this.presentAlert("Contraseña Inválida", "La contraseña debe tener al menos 8 carácteres, una letra mayúscula, y un símbolo.");
+            return;
+        }
 
+        if(this.pass1 != this.pass2) {
+            this.presentAlert("Contraseñas No Coinciden", "Las contraseñas no coinciden.");
+            return;
+        }
+
+        this.router.navigate(['/home']);
+    }
+    
+    async presentAlert(title:string, msg:string, sub:string = "") {
+        const alert = await this.alertController.create({
+            header: title,
+            subHeader: sub,
+            message: msg,
+            buttons: ['OK'],
+        });
+        
+        await alert.present();
+    }
+    
 }
