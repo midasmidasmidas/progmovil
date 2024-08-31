@@ -9,22 +9,28 @@ export class HistorialPage implements OnInit {
     
     historial: any = [
         {
-            imagen: "assets/img/placeholder2.jpg",
-            nombre: "Nombre 1",
+            imagen: "assets/img/productos/placeholder2.webp",
+            nombre: "Polera Cráneo Flameante",
             fecha: "30/08/2024",
-            precio: 3000,
+            precio: 12000,
         },
         {
-            imagen: "assets/img/placeholder2.jpg",
-            nombre: "Nombre 2",
+            imagen: "assets/img/productos/placeholder2.webp",
+            nombre: "Polera Cráneo Flameante",
             fecha: "30/08/2024",
+            precio: 12000,
+        },
+        {
+            imagen: "assets/img/productos/placeholder3.webp",
+            nombre: "Polera Blanca Logo Negro",
+            fecha: "18/08/2024",
             precio: 8000,
         },
         {
-            imagen: "assets/img/placeholder2.jpg",
-            nombre: "Nombre 3",
-            fecha: "30/08/2024",
-            precio: 2000,
+            imagen: "assets/img/productos/placeholder1.webp",
+            nombre: "Hoodie Kill 'em All",
+            fecha: "12/08/2024",
+            precio: 9000,
         },
     ] 
     

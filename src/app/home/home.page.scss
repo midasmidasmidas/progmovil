@@ -1,18 +1,31 @@
 #container {
-  text-align: center;
-
-  top: 5%;
+    text-align: center;
+    
+    top: 5%;
 }
 
 #container p {
-  font-size: 16px;
-  line-height: 22px;
+    font-size: 16px;
+    line-height: 22px;
+    
+    color: #a1a1a1;
+    
+    margin: 0;
+}
 
-  color: #a1a1a1;
-
-  margin: 0;
+#container h2 {
+    font-size: 18px;
+    font-weight: bold;
 }
 
 #container a {
-  text-decoration: none;
+    text-decoration: none;
+}
+
+ion-searchbar.custom {
+    --background: rgb(17, 44, 71);
+    --color: #fff;
+    --placeholder-color: #fff;
+    --icon-color: #fff;
+    --clear-button-color: #fff;
 }

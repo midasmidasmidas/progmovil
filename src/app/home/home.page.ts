@@ -10,28 +10,46 @@ export class HomePage {
 
     productos: any = [
         {
-            imagen: "assets/img/placeholder.webp",
-            nombre: "Nombre 1",
-            marca: "Marca 1",
-            precio: 3000,
+            imagen: "assets/img/productos/placeholder1.webp",
+            nombre: "Hoodie Kill 'Em All",
+            marca: "Metallica",
+            precio: 14000,
         },
         {
-            imagen: "assets/img/placeholder.webp",
-            nombre: "Nombre 2",
-            marca: "Marca 2",
-            precio: 8000,
+            imagen: "assets/img/productos/placeholder2.webp",
+            nombre: "Polera Cráneo Flameante",
+            marca: "Metallica",
+            precio: 12000,
         },
         {
-            imagen: "assets/img/placeholder.webp",
-            nombre: "Nombre 3",
-            marca: "Marca 3",
-            precio: 2000,
+            imagen: "assets/img/productos/placeholder3.webp",
+            nombre: "Polera Blanca Logo Negro",
+            marca: "Metallica",
+            precio: 12000,
         },
         {
-            imagen: "assets/img/placeholder.webp",
-            nombre: "Nombre 4",
-            marca: "Marca 4",
-            precio: 6000,
+            imagen: "assets/img/productos/placeholder4.webp",
+            nombre: "Polera Master of Puppets",
+            marca: "Metallica",
+            precio: 11000,
+        },
+        {
+            imagen: "assets/img/productos/placeholder5.webp",
+            nombre: "Polera 72 Seasons",
+            marca: "Metallica",
+            precio: 13000,
+        },
+        {
+            imagen: "assets/img/productos/placeholder6.webp",
+            nombre: "Polera Kill 'Em All",
+            marca: "Metallica",
+            precio: 13000,
+        },
+        {
+            imagen: "assets/img/productos/placeholder7.webp",
+            nombre: "Polera Logo 72 Seasons",
+            marca: "Metallica",
+            precio: 15000,
         },
     ] 
     

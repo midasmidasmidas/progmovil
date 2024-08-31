@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ProductoPage implements OnInit {
     
-    imagen:string = "assets/img/placeholder.webp";
+    imagen:string = "assets/img/productos/placeholder1.webp";
     nombre:string =  "NOMBRE";
     marca:string = "MARCA";
     precio:number = 0;

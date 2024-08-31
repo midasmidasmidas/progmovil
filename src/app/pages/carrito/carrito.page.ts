@@ -9,22 +9,22 @@ export class CarritoPage implements OnInit {
     
     carrito: any = [
         {
-            imagen: "assets/img/placeholder.webp",
-            nombre: "Nombre 1",
-            marca: "Marca 1",
-            precio: 3000,
+            imagen: "assets/img/productos/placeholder1.webp",
+            nombre: "Hoodie Kill 'em All",
+            marca: "Metallica",
+            precio: 7000,
         },
         {
-            imagen: "assets/img/placeholder.webp",
-            nombre: "Nombre 2",
-            marca: "Marca 2",
+            imagen: "assets/img/productos/placeholder3.webp",
+            nombre: "Polera Blanca Logo Negro",
+            marca: "Metallica",
             precio: 8000,
         },
         {
-            imagen: "assets/img/placeholder.webp",
-            nombre: "Nombre 3",
-            marca: "Marca 3",
-            precio: 2000,
+            imagen: "assets/img/productos/placeholder2.webp",
+            nombre: "Polera Cráneo Flameante",
+            marca: "Metallica",
+            precio: 12000,
         },
     ]
     

@@ -21,7 +21,7 @@ ion-input {
     top: 10%;
 }
 
-* {
+ion-content, ion-toolbar {
     --background: rgb(6, 21, 37);
     --ion-item-background: rgb(6, 21, 37);
     --border-color: rgb(0, 45, 82);
@@ -31,12 +31,12 @@ ion-icon {
     color: rgb(186, 214, 255);
 }
 
-.img-producto-home {
-    width: 96px;
-}
-
 #container-alt {
     text-align: center;
   
     padding-top: 12px;
+}
+
+.img-producto{
+    width: 90px;
 }
