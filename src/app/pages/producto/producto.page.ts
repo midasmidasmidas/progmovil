@@ -9,8 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ProductoPage implements OnInit {
     
     imagen:string = "assets/img/placeholder.webp";
-    nombre:string =  "";
-    marca:string = "";
+    nombre:string =  "NOMBRE";
+    marca:string = "MARCA";
     precio:number = 0;
     
     constructor(private router: Router, private activedroute: ActivatedRoute) {

@@ -19,7 +19,7 @@
         <img src="assets/img/user.png" style="width:128px;">
         <h1>Nombre de Usuario</h1>
 
-        <h5>Cuenta</h5>
+        <h5><b>Cuenta</b></h5>
         <ion-list>
             <ion-item>
                 <ion-button class="boton-azul" [routerLink]="'/cuenta/editar'" size="medium">
@@ -30,7 +30,7 @@
             <ion-item>
                 <ion-button class="boton-azul" [routerLink]="'/cuenta/wishlist'" size="medium">
                     <ion-icon slot="start" name="heart"></ion-icon>
-                    Listas de Deseados
+                    Lista de Deseados
                 </ion-button>
             </ion-item>
             <ion-item>
@@ -41,12 +41,25 @@
             </ion-item>
         </ion-list>
 
-        <h5>Privacidad</h5>
+        <h5><b>Privacidad</b></h5>
         <ion-list>
             <ion-item>
                 <ion-button class="boton-azul" [routerLink]="'/cuenta/password-cambio'" size="medium">
                     <ion-icon slot="start" name="person"></ion-icon>
                     Cambiar Contraseña
+                </ion-button>
+            </ion-item>
+        </ion-list>
+
+        <h5><b>Admin</b></h5>
+        <p style="font-size: 12px; color:rgb(84, 125, 201)">Esto se debe mostrar solo si el usuario es admin,
+        <br>pero como no es funcional todavía, se muestra siempre</p>
+        
+        <ion-list>
+            <ion-item>
+                <ion-button class="boton-azul" [routerLink]="'/admin/add-ropa'" size="medium">
+                    <ion-icon slot="start" name="add"></ion-icon>
+                    Añadir Producto
                 </ion-button>
             </ion-item>
         </ion-list>

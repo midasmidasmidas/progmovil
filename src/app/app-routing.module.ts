@@ -32,6 +32,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/producto/producto.module').then( m => m.ProductoPageModule)
   },
   {
+    path: 'admin/add-ropa',
+    loadChildren: () => import('./pages/admin/add-ropa/add-ropa.module').then( m => m.AddRopaPageModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
   },

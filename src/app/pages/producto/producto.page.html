@@ -25,8 +25,29 @@
                 <p>${{precio}}</p>
             </ion-label>
         </ion-item>
-        
+
         <ion-button class="boton-azul" size="large">Añadir al Carrito</ion-button>
+        
+        <h5><b>Admin</b></h5>
+        <p style="font-size: 12px; color:rgb(84, 125, 201)">Esto se debe mostrar solo si el usuario es admin,
+        <br>pero como no es funcional todavía, se muestra siempre</p>
+        
+        <ion-list>
+            <ion-item>
+                <ion-button class="boton-azul" size="medium">
+                    <ion-icon slot="start" name="create"></ion-icon>
+                    Editar Producto
+                </ion-button>
+            </ion-item>
+            <ion-item>
+                    <ion-buttons>
+                        <ion-button style="background-color: red;" size="medium">
+                            <ion-icon style="color: white;" slot="start" name="close"></ion-icon>
+                            Eliminar Producto
+                        </ion-button>
+                    </ion-buttons>
+            </ion-item>
+        </ion-list>
     </div>
 
 </ion-content>
