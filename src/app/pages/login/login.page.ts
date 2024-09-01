@@ -12,6 +12,10 @@ export class LoginPage implements OnInit {
     email:string = "";
     nombre:string = "";
     pass1:string = "";
+
+    emailTest:string = "james@72seasons.com"
+    nombreTest:string = "James Hetfield"
+    pass1Test:string = "ForWhomTheBellTolls2$"
     
     constructor(private router:Router, private alertController: AlertController) { }
     
@@ -24,9 +28,21 @@ export class LoginPage implements OnInit {
             return;
         }
         
-        const regex = /^(?=.*\d)(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
-        if(!regex.test(this.pass1)) {
+        const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if(!regexEmail.test(this.email)) {
+            this.presentAlert("Correo Inválido", "Se ha ingresado un correo con formato inválido. Intentelo de nuevo.");
+            return;
+        }
+
+        const regexPassword = /^(?=.*\d)(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
+        if(!regexPassword.test(this.pass1)) {
             this.presentAlert("Contraseña Incorrecta", "Intentelo de nuevo.");
+            return;
+        }
+
+        // esto es exclusivamente para testeo del login. se debe reemplazar luego cuando hagamos sesiones reales
+        if(this.email != this.emailTest || this.nombre != this.nombreTest || this.pass1 != this.pass1Test) {
+            this.presentAlert("Datos incorrectos.", "Intentelo de nuevo.");
             return;
         }
         

@@ -24,6 +24,12 @@ export class PasswordRecuperarPage implements OnInit {
             return;
         }
 
+        const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if(!regexEmail.test(this.email)) {
+            this.presentAlert("Correo Inválido", "Se ha ingresado un correo con formato inválido. Intentelo de nuevo.");
+            return;
+        }
+
         const regex = /^(?=.*\d)(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
         if(!regex.test(this.pass1)) {
             this.presentAlert("Contraseña Inválida", "La contraseña debe tener al menos 8 carácteres, una letra mayúscula, y un símbolo.");
