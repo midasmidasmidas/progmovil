@@ -51,6 +51,36 @@ export class HomePage {
             marca: "Metallica",
             precio: 15000,
         },
+        {
+            imagen: "assets/img/productos/placeholder8.webp",
+            nombre: "Hoodie Ride The Lightning",
+            marca: "Metallica",
+            precio: 16000,
+        },
+        {
+            imagen: "assets/img/productos/placeholder9.webp",
+            nombre: "Hoodie Through The Never",
+            marca: "Metallica",
+            precio: 15000,
+        },
+        {
+            imagen: "assets/img/productos/placeholder10.webp",
+            nombre: "Polera Aniversario 30",
+            marca: "Metallica",
+            precio: 15000,
+        },
+        {
+            imagen: "assets/img/productos/placeholder11.webp",
+            nombre: "Polera Cráneo Mecánico",
+            marca: "Metallica x Fortnite",
+            precio: 18000,
+        },
+        {
+            imagen: "assets/img/productos/placeholder12.webp",
+            nombre: "Polera Call of Ktulu",
+            marca: "Metallica",
+            precio: 13000,
+        },
     ] 
     
     constructor(private router:Router) {}
