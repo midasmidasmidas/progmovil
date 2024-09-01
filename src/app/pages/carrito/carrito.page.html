@@ -19,7 +19,9 @@
         <ion-row *ngFor="let x of carrito">
             <ion-col>
                 <ion-item class="producto">
-                    <img slot="start" src="{{x.imagen}}">
+                    <ion-button fill="clear" (click)="irProducto(x)">
+                        <img slot="start" src="{{x.imagen}}">
+                    </ion-button>
                     <ion-label class="ion-padding-horizontal">
                         <h2>{{x.nombre}}</h2>
                         <h3>{{x.marca}}</h3>

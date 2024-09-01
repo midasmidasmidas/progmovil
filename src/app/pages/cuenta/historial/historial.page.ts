@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Component({
     selector: 'app-historial',
@@ -9,10 +10,10 @@ export class HistorialPage implements OnInit {
     
     historial: any = [
         {
-            imagen: "assets/img/productos/placeholder2.webp",
-            nombre: "Polera Cráneo Flameante",
+            imagen: "assets/img/productos/placeholder6.webp",
+            nombre: "Polera Kill 'Em All",
             fecha: "30/08/2024",
-            precio: 12000,
+            precio: 13000,
         },
         {
             imagen: "assets/img/productos/placeholder2.webp",
@@ -34,9 +35,23 @@ export class HistorialPage implements OnInit {
         },
     ] 
     
-    constructor() { }
+    constructor(private router:Router) {}
     
     ngOnInit() {
+    }
+
+    irProducto(x:any)
+    {
+        let navExtras: NavigationExtras = {
+            state:{
+              imagen: x.imagen,
+              nombre: x.nombre,
+              marca: x.marca,
+              precio: x.precio,
+            }
+        }
+
+        this.router.navigate(['/producto'], navExtras);
     }
     
 }

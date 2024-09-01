@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Component({
     selector: 'app-carrito',
@@ -21,16 +22,30 @@ export class CarritoPage implements OnInit {
             precio: 8000,
         },
         {
-            imagen: "assets/img/productos/placeholder2.webp",
-            nombre: "Polera Cráneo Flameante",
+            imagen: "assets/img/productos/placeholder5.webp",
+            nombre: "Polera 72 Seasons",
             marca: "Metallica",
             precio: 12000,
         },
     ]
     
-    constructor() { }
+    constructor(private router:Router) {}
     
     ngOnInit() {
+    }
+
+    irProducto(x:any)
+    {
+        let navExtras: NavigationExtras = {
+            state:{
+              imagen: x.imagen,
+              nombre: x.nombre,
+              marca: x.marca,
+              precio: x.precio,
+            }
+        }
+
+        this.router.navigate(['/producto'], navExtras);
     }
     
 }
