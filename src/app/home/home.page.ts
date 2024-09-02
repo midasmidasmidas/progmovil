@@ -81,6 +81,18 @@ export class HomePage {
             marca: "Metallica",
             precio: 13000,
         },
+        {
+            imagen: "assets/img/productos/placeholder13.webp",
+            nombre: "Polera St. Anger",
+            marca: "Metallica",
+            precio: 12000,
+        },
+        {
+            imagen: "assets/img/productos/placeholder14.webp",
+            nombre: "Polera Death Magnetic",
+            marca: "Metallica",
+            precio: 11000,
+        },
     ] 
     
     constructor(private router:Router) {}
