@@ -17,19 +17,19 @@
   
   <div class="form-centrada">
       <ion-item>
-          <ion-input label="Imagen" labelPlacement="stacked" placeholder="Ingrese URL/Dirección de imagen..."></ion-input>
+          <ion-input [(ngModel)]="imagen" label="Imagen" labelPlacement="stacked" placeholder="Ingrese URL/Dirección de imagen..."></ion-input>
       </ion-item>
       <ion-item>
-          <ion-input label="Nombre" labelPlacement="stacked" placeholder="Ingrese nombre..."></ion-input>
+          <ion-input [(ngModel)]="nombre" label="Nombre" labelPlacement="stacked" placeholder="Ingrese nombre..."></ion-input>
       </ion-item>
       <ion-item>
-          <ion-input label="Marca" labelPlacement="stacked" placeholder="Ingrese marca..."></ion-input>
+          <ion-input [(ngModel)]="marca" label="Marca" labelPlacement="stacked" placeholder="Ingrese marca..."></ion-input>
       </ion-item>
       <ion-item>
-          <ion-input label="Precio" type="number" labelPlacement="stacked" placeholder="Ingrese precio sin comas ni simbolos..."></ion-input>
+          <ion-input [(ngModel)]="precio" label="Precio" type="number" labelPlacement="stacked" placeholder="Ingrese precio sin comas ni simbolos..."></ion-input>
       </ion-item>
       <br>
       
-      <ion-button class="boton-azul" size="large">Añadir Producto</ion-button>
+      <ion-button (click)="validarProducto()" class="boton-azul" size="large">Añadir Producto</ion-button>
   </div>
 </ion-content>
