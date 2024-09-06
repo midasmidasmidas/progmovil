@@ -29,7 +29,7 @@ export class HistorialPage implements OnInit {
         },
         {
             imagen: "assets/img/productos/placeholder1.webp",
-            nombre: "Hoodie Kill 'em All",
+            nombre: "Polerón Kill 'em All",
             fecha: "12/08/2024",
             precio: 9000,
         },

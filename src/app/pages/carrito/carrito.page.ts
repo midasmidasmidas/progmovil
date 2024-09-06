@@ -11,7 +11,7 @@ export class CarritoPage implements OnInit {
     carrito: any = [
         {
             imagen: "assets/img/productos/placeholder1.webp",
-            nombre: "Hoodie Kill 'em All",
+            nombre: "Polerón Kill 'em All",
             marca: "Metallica",
             precio: 7000,
         },

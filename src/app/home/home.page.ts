@@ -11,7 +11,7 @@ export class HomePage {
     productos: any = [
         {
             imagen: "assets/img/productos/placeholder1.webp",
-            nombre: "Hoodie Kill 'Em All",
+            nombre: "Polerón Kill 'Em All",
             marca: "Metallica",
             precio: 14000,
         },
@@ -53,13 +53,13 @@ export class HomePage {
         },
         {
             imagen: "assets/img/productos/placeholder8.webp",
-            nombre: "Hoodie Ride The Lightning",
+            nombre: "Polerón Ride The Lightning",
             marca: "Metallica",
             precio: 16000,
         },
         {
             imagen: "assets/img/productos/placeholder9.webp",
-            nombre: "Hoodie Through The Never",
+            nombre: "Polerón Through The Never",
             marca: "Metallica",
             precio: 15000,
         },
