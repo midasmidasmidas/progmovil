@@ -93,9 +93,16 @@ export class HomePage {
             marca: "Metallica",
             precio: 11000,
         },
-    ] 
+    ];
+
+    busqueda = [...this.productos];
     
     constructor(private router:Router) {}
+
+    buscarProducto(event:any) {
+        const query = event.target.value.toLowerCase();
+        this.busqueda = this.productos.filter((producto:any) => producto.nombre.toLowerCase().includes(query));
+    }
 
     irProducto(x:any)
     {

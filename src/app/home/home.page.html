@@ -19,8 +19,8 @@
         <!-- <strong>Ready to create an app?</strong>
         <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p> -->
 
-        <ion-searchbar [debounce]="800" placeholder="Buscar..." show-clear-button="always" clear-icon="trash-bin" class="custom"></ion-searchbar>
-        <ion-row *ngFor="let x of productos">
+        <ion-searchbar [debounce]="700" placeholder="Buscar..." show-clear-button="always" clear-icon="trash-bin" class="custom" (ionInput)="buscarProducto($event)"></ion-searchbar>
+        <ion-row *ngFor="let x of busqueda">
             <ion-col>
                 <ion-item class="producto">
                     <ion-button fill="clear" (click)="irProducto(x)">
