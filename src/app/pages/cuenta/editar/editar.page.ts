@@ -10,7 +10,7 @@ import { AlertController } from '@ionic/angular';
 export class EditarPage implements OnInit {
     
     nombre:string = "James";
-    correo:string = "james@72seasons.com";
+    email:string = "james@72seasons.com";
     
     constructor(private router:Router, private alertController: AlertController) { }
     
@@ -18,8 +18,14 @@ export class EditarPage implements OnInit {
     }
     
     validarEditar() {
-        if(this.nombre == "" || this.correo == "") {
+        if(this.nombre == "" || this.email == "") {
             this.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
+            return;
+        }
+
+        const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if(!regexEmail.test(this.email)) {
+            this.presentAlert("Correo Inválido", "Se ha ingresado un correo con formato inválido. Intentelo de nuevo.");
             return;
         }
 
