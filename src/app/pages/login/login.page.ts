@@ -14,7 +14,7 @@ export class LoginPage implements OnInit {
     pass1:string = "";
 
     emailTest:string = "james@72seasons.com"
-    nombreTest:string = "James Hetfield"
+    nombreTest:string = "James"
     pass1Test:string = "BellTolls1!"
     
     constructor(private router:Router, private alertController: AlertController) { }
