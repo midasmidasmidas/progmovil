@@ -1,0 +1,35 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-title>Editar Producto</ion-title>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <ion-header collapse="condense">
+        <ion-toolbar>
+            <ion-title size="large">Editar Producto</ion-title>
+        </ion-toolbar>
+    </ion-header>
+    
+    <div class="form-centrada">
+        <ion-item>
+            <ion-input [(ngModel)]="imagen" label="Imagen" labelPlacement="stacked" placeholder="Ingrese URL/Dirección de imagen..."></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-input [(ngModel)]="nombre" label="Nombre" labelPlacement="stacked" placeholder="Ingrese nombre..."></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-input [(ngModel)]="marca" label="Marca" labelPlacement="stacked" placeholder="Ingrese marca..."></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-input [(ngModel)]="precio" label="Precio" type="number" labelPlacement="stacked" placeholder="Ingrese precio sin comas ni simbolos..."></ion-input>
+        </ion-item>
+        <br>
+        
+        <ion-button (click)="validarProducto()" class="boton-azul" size="large">Añadir Producto</ion-button>
+    </div>
+</ion-content>
