@@ -11,85 +11,99 @@ export class HomePage {
     productos: any = [
         {
             imagen: "assets/img/productos/placeholder1.webp",
-            nombre: "Polerón Kill 'Em All",
+            nombre: "Kill 'Em All",
+            tipo: "Polerón",
             marca: "Metallica",
             precio: 14000,
         },
         {
             imagen: "assets/img/productos/placeholder2.webp",
-            nombre: "Polera Cráneo Flameante",
+            nombre: "Cráneo Flameante",
+            tipo: "Polera",
             marca: "Metallica",
             precio: 12000,
         },
         {
             imagen: "assets/img/productos/placeholder3.webp",
-            nombre: "Polera Blanca Logo Negro",
+            nombre: "Blanca Logo Negro",
+            tipo: "Polera",
             marca: "Metallica",
             precio: 12000,
         },
         {
             imagen: "assets/img/productos/placeholder4.webp",
-            nombre: "Polera Master of Puppets",
+            nombre: "Master of Puppets",
+            tipo: "Polera",
             marca: "Metallica",
             precio: 11000,
         },
         {
             imagen: "assets/img/productos/placeholder5.webp",
-            nombre: "Polera 72 Seasons",
+            nombre: "72 Seasons",
+            tipo: "Polera",
             marca: "Metallica",
             precio: 13000,
         },
         {
             imagen: "assets/img/productos/placeholder6.webp",
-            nombre: "Polera Kill 'Em All",
+            nombre: "Kill 'Em All",
+            tipo: "Polera",
             marca: "Metallica",
             precio: 13000,
         },
         {
             imagen: "assets/img/productos/placeholder7.webp",
-            nombre: "Polera Logo 72 Seasons",
+            nombre: "Logo 72 Seasons",
+            tipo: "Polera",
             marca: "Metallica",
             precio: 15000,
         },
         {
             imagen: "assets/img/productos/placeholder8.webp",
-            nombre: "Polerón Ride The Lightning",
+            nombre: "Ride The Lightning",
+            tipo: "Polerón",
             marca: "Metallica",
             precio: 16000,
         },
         {
             imagen: "assets/img/productos/placeholder9.webp",
-            nombre: "Polerón Through The Never",
+            nombre: "Through The Never",
+            tipo: "Polerón",
             marca: "Metallica",
             precio: 15000,
         },
         {
             imagen: "assets/img/productos/placeholder10.webp",
-            nombre: "Polera Aniversario 30",
+            nombre: "Aniversario 30",
+            tipo: "Polera",
             marca: "Metallica",
             precio: 15000,
         },
         {
             imagen: "assets/img/productos/placeholder11.webp",
-            nombre: "Polera Cráneo Mecánico",
+            nombre: "Cráneo Mecánico",
+            tipo: "Polera",
             marca: "Metallica x Fortnite",
             precio: 18000,
         },
         {
             imagen: "assets/img/productos/placeholder12.webp",
-            nombre: "Polera Call of Ktulu",
+            nombre: "Call of Ktulu",
+            tipo: "Polera",
             marca: "Metallica",
             precio: 13000,
         },
         {
             imagen: "assets/img/productos/placeholder13.webp",
-            nombre: "Polera St. Anger",
+            nombre: "St. Anger",
+            tipo: "Polera",
             marca: "Metallica",
             precio: 12000,
         },
         {
             imagen: "assets/img/productos/placeholder14.webp",
-            nombre: "Polera Death Magnetic",
+            nombre: "Death Magnetic",
+            tipo: "Polera",
             marca: "Metallica",
             precio: 11000,
         },
@@ -101,7 +115,10 @@ export class HomePage {
 
     buscarProducto(event:any) {
         const query = event.target.value.toLowerCase();
-        this.busqueda = this.productos.filter((producto:any) => producto.nombre.toLowerCase().includes(query));
+        this.busqueda = this.productos.filter((producto:any) => 
+            producto.nombre.toLowerCase().includes(query) || // busca por nombre
+            producto.tipo.toLowerCase().includes(query) // pero tambien por tipo
+        );
     }
 
     irProducto(x:any)
