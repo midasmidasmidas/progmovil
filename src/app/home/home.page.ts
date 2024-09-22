@@ -127,6 +127,7 @@ export class HomePage {
             state:{
               imagen: x.imagen,
               nombre: x.nombre,
+              tipo: x.tipo,
               marca: x.marca,
               precio: x.precio,
             }

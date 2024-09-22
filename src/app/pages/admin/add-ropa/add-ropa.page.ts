@@ -11,6 +11,7 @@ export class AddRopaPage implements OnInit {
     
     imagen:string = "";
     nombre:string =  "";
+    tipo:string = "";
     marca:string = "";
     precio:number = 1;
     
@@ -20,7 +21,7 @@ export class AddRopaPage implements OnInit {
     }
     
     validarProducto() {
-        if(this.imagen == "" || this.nombre == "" || this.marca == "") {
+        if(this.imagen == "" || this.nombre == "" || this.marca == "" || this.tipo == "") {
             this.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
             return;
         }

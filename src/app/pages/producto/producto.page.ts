@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 
 @Component({
     selector: 'app-producto',
@@ -10,6 +10,7 @@ export class ProductoPage implements OnInit {
     
     imagen:string = "assets/img/productos/placeholder1.webp";
     nombre:string =  "NOMBRE";
+    tipo:string = "TIPO";
     marca:string = "MARCA";
     precio:number = 0;
     
@@ -21,6 +22,7 @@ export class ProductoPage implements OnInit {
                 //capturamos la informacion
                 this.imagen = this.router.getCurrentNavigation()?.extras?.state?.['imagen'];
                 this.nombre = this.router.getCurrentNavigation()?.extras?.state?.['nombre'];
+                this.tipo = this.router.getCurrentNavigation()?.extras?.state?.['tipo'];
                 this.marca = this.router.getCurrentNavigation()?.extras?.state?.['marca'];
                 this.precio = this.router.getCurrentNavigation()?.extras?.state?.['precio'];
                 
@@ -29,6 +31,21 @@ export class ProductoPage implements OnInit {
     }
     
     ngOnInit() {
+    }
+    
+    irEditarProducto()
+    {
+        let navExtras: NavigationExtras = {
+            state:{
+                imagen: this.imagen,
+                nombre: this.nombre,
+                tipo: this.tipo,
+                marca: this.marca,
+                precio: this.precio,
+            }
+        }
+        
+        this.router.navigate(['/admin/edit-ropa'], navExtras);
     }
     
 }

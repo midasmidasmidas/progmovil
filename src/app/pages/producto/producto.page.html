@@ -22,7 +22,7 @@
             <ion-label class="ion-padding-horizontal">
                 <h1>{{nombre}}</h1>
                 <h3>{{marca}}</h3>
-                <p>${{precio}}</p>
+                <p>{{tipo}} | ${{precio}}</p>
             </ion-label>
         </ion-item>
 
@@ -34,7 +34,7 @@
         
         <ion-list>
             <ion-item>
-                <ion-button class="boton-azul" size="medium" [routerLink]="'/admin/edit-ropa'">
+                <ion-button class="boton-azul" size="medium" (click)="irEditarProducto()">
                     <ion-icon slot="start" name="create"></ion-icon>
                     Editar Producto
                 </ion-button>
