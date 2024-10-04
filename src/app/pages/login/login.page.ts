@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
     selector: 'app-login',
@@ -17,47 +18,35 @@ export class LoginPage implements OnInit {
     nombreTest:string = "James"
     pass1Test:string = "BellTolls1!"
     
-    constructor(private router:Router, private alertController: AlertController) { }
+    constructor(private router:Router, private alertController: AlertController, private bd:ServicebdService) { }
     
     ngOnInit() {
     }
     
     confirmarLogin() {
         if(this.email == "" || this.nombre == "" || this.pass1 == "") {
-            this.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
+            this.bd.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
             return;
         }
         
         const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if(!regexEmail.test(this.email)) {
-            this.presentAlert("Correo Inválido", "Se ha ingresado un correo con formato inválido. Intentelo de nuevo.");
+            this.bd.presentAlert("Correo Inválido", "Se ha ingresado un correo con formato inválido. Intentelo de nuevo.");
             return;
         }
 
         const regexPassword = /^(?=.*\d)(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
         if(!regexPassword.test(this.pass1)) {
-            this.presentAlert("Contraseña Incorrecta", "Intentelo de nuevo.");
+            this.bd.presentAlert("Contraseña Incorrecta", "Intentelo de nuevo.");
             return;
         }
 
         // esto es exclusivamente para testeo del login. se debe reemplazar luego cuando hagamos sesiones reales
         if(this.email != this.emailTest || this.nombre != this.nombreTest || this.pass1 != this.pass1Test) {
-            this.presentAlert("Datos incorrectos.", "Intentelo de nuevo.");
+            this.bd.presentAlert("Datos incorrectos.", "Intentelo de nuevo.");
             return;
         }
         
         this.router.navigate(['/home']);
     }
-    
-    async presentAlert(title:string, msg:string, sub:string = "") {
-        const alert = await this.alertController.create({
-            header: title,
-            subHeader: sub,
-            message: msg,
-            buttons: ['OK'],
-        });
-        
-        await alert.present();
-    }
-    
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
     selector: 'app-add-ropa',
@@ -15,34 +16,22 @@ export class AddRopaPage implements OnInit {
     marca:string = "";
     precio:number = 1;
     
-    constructor(private router:Router, private alertController: AlertController) { }
+    constructor(private router:Router, private alertController: AlertController, private bd:ServicebdService) { }
     
     ngOnInit() {
     }
     
     validarProducto() {
         if(this.imagen == "" || this.nombre == "" || this.marca == "" || this.tipo == "") {
-            this.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
+            this.bd.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
             return;
         }
         
         if(this.precio < 1) {
-            this.presentAlert("Precio Inválido", "El precio no puede ser negativo o cero.");
+            this.bd.presentAlert("Precio Inválido", "El precio no puede ser negativo o cero.");
             return;
         }
 
         this.router.navigate(['/home']);
     }
-
-    async presentAlert(title:string, msg:string, sub:string = "") {
-        const alert = await this.alertController.create({
-            header: title,
-            subHeader: sub,
-            message: msg,
-            buttons: ['OK'],
-        });
-        
-        await alert.present();
-    }
-    
 }

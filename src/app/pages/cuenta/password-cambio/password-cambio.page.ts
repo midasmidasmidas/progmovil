@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
     selector: 'app-password-cambio',
@@ -12,40 +13,28 @@ export class PasswordCambioPage implements OnInit {
     pass1:string = "";
     pass2:string = "";
     
-    constructor(private router:Router, private alertController: AlertController) { }
+    constructor(private router:Router, private alertController: AlertController, private bd:ServicebdService) { }
     
     ngOnInit() {
     }
     
     validarPassword() {
         if(this.pass1 == "" || this.pass2 == "") {
-            this.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
+            this.bd.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
             return;
         }
         
         const regex = /^(?=.*\d)(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
         if(!regex.test(this.pass1)) {
-            this.presentAlert("Contraseña Inválida", "La contraseña debe tener al menos 8 carácteres, una letra mayúscula, y un símbolo.");
+            this.bd.presentAlert("Contraseña Inválida", "La contraseña debe tener al menos 8 carácteres, una letra mayúscula, y un símbolo.");
             return;
         }
         
         if(this.pass1 != this.pass2) {
-            this.presentAlert("Contraseñas No Coinciden", "Las contraseñas no coinciden.");
+            this.bd.presentAlert("Contraseñas No Coinciden", "Las contraseñas no coinciden.");
             return;
         }
         
         this.router.navigate(['/home']);
     }
-    
-    async presentAlert(title:string, msg:string, sub:string = "") {
-        const alert = await this.alertController.create({
-            header: title,
-            subHeader: sub,
-            message: msg,
-            buttons: ['OK'],
-        });
-        
-        await alert.present();
-    }
-    
 }

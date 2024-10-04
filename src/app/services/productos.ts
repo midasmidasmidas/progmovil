@@ -1,5 +1,5 @@
 export class Productos {
-    pr_id!: number; // auto incrementable en la base de datos
+    pr_id!: number; // se debe configurar como autoincrementable en la base de datos
     pr_nombre!: string;
     pr_tipo!: string;
     pr_marca!: string;
