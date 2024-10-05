@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
@@ -18,7 +17,7 @@ export class LoginPage implements OnInit {
     nombreTest:string = "James"
     pass1Test:string = "BellTolls1!"
     
-    constructor(private router:Router, private alertController: AlertController, private bd:ServicebdService) { }
+    constructor(private router:Router, private bd:ServicebdService) { }
     
     ngOnInit() {
     }
