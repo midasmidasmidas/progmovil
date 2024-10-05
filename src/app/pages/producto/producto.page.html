@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
     <ion-toolbar>
-        <ion-title>{{nombre}}</ion-title>
+        <ion-title>{{producto.pr_nombre}}</ion-title>
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
             <ion-back-button></ion-back-button>
@@ -9,20 +9,15 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-    <ion-header collapse="condense">
-        <ion-toolbar>
-            <ion-title size="large">producto</ion-title>
-        </ion-toolbar>
-    </ion-header>
     
     <div id="container-alt">
-        <img style="width: 256px;" src="{{imagen}}">
+        <img style="width: 256px;" src="{{producto.pr_imagen}}">
         
         <ion-item class="producto ion-text-center">
             <ion-label class="ion-padding-horizontal">
-                <h1>{{nombre}}</h1>
-                <h3>{{marca}}</h3>
-                <p>{{tipo}} | ${{precio}}</p>
+                <h1>{{producto.pr_nombre}}</h1>
+                <h3>{{producto.pr_marca}}</h3>
+                <p>{{producto.pr_tipo}} | ${{producto.pr_precio}}</p>
             </ion-label>
         </ion-item>
 
@@ -34,14 +29,14 @@
         
         <ion-list>
             <ion-item>
-                <ion-button class="boton-azul" size="medium" (click)="irEditarProducto()">
+                <ion-button class="boton-azul" size="medium" (click)="modificar()">
                     <ion-icon slot="start" name="create"></ion-icon>
                     Editar Producto
                 </ion-button>
             </ion-item>
             <ion-item>
                     <ion-buttons>
-                        <ion-button style="background-color: red;" size="medium">
+                        <ion-button style="background-color: red;" size="medium" (click)="eliminar()">
                             <ion-icon style="color: white;" slot="start" name="close"></ion-icon>
                             Eliminar Producto
                         </ion-button>

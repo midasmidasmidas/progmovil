@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
@@ -10,23 +9,22 @@ import { ServicebdService } from 'src/app/services/servicebd.service';
 })
 export class EditRopaPage implements OnInit {
     
-    imagen:string = "";
-    nombre:string =  "";
-    tipo:string = "";
-    marca:string = "";
-    precio:number = 1;
-    
-    constructor(private router:Router, private alertController:AlertController, private activedroute: ActivatedRoute, private bd:ServicebdService) {
-        //realizar la captura de la informacion que viene por navigationExtras
+    producto:any = {
+        pr_id: 1,
+        pr_nombre: "",
+        pr_tipo: "",
+        pr_marca:"",
+        pr_precio: 1,
+        pr_imagen: "",
+    }
+
+    constructor(private router:Router, private activedroute: ActivatedRoute, private bd:ServicebdService) {
+        // realizar la captura de la informacion que viene por navigationExtras
         this.activedroute.queryParams.subscribe(param =>{
-            //validamos si viene o no información
+            // validamos si viene o no información
             if(this.router.getCurrentNavigation()?.extras.state){
-                //capturamos la informacion
-                this.imagen = this.router.getCurrentNavigation()?.extras?.state?.['imagen'];
-                this.nombre = this.router.getCurrentNavigation()?.extras?.state?.['nombre'];
-                this.tipo = this.router.getCurrentNavigation()?.extras?.state?.['tipo'];
-                this.marca = this.router.getCurrentNavigation()?.extras?.state?.['marca'];
-                this.precio = this.router.getCurrentNavigation()?.extras?.state?.['precio'];
+                // capturamos la informacion
+                this.producto = this.router.getCurrentNavigation()?.extras?.state?.['productoEnviado'];
             }
         });
     }
@@ -35,12 +33,12 @@ export class EditRopaPage implements OnInit {
     }
 
     validarProducto() {
-        if(this.imagen == "" || this.nombre == "" || this.marca == "" || this.tipo == "") {
+        if(this.producto.pr_imagen == "" || this.producto.pr_nombre == "" || this.producto.pr_marca == "" || this.producto.pr_tipo == "") {
             this.bd.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
             return;
         }
         
-        if(this.precio < 1) {
+        if(this.producto.pr_precio < 1) {
             this.bd.presentAlert("Precio Inválido", "El precio no puede ser negativo o cero.");
             return;
         }
