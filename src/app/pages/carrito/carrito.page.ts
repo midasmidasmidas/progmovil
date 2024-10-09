@@ -10,26 +10,33 @@ export class CarritoPage implements OnInit {
     
     carrito: any = [
         {
-            imagen: "assets/img/productos/placeholder1.webp",
-            nombre: "Polerón Kill 'em All",
-            marca: "Metallica",
-            precio: 7000,
+            pr_id: 4,
+            pr_imagen: "assets/img/productos/placeholder1.webp",
+            pr_nombre: "Kill 'em All",
+            pr_tipo: "Poleron",
+            pr_marca: "Metallica",
+            pr_precio: 7000,
         },
         {
-            imagen: "assets/img/productos/placeholder3.webp",
-            nombre: "Polera Blanca Logo Negro",
-            marca: "Metallica",
-            precio: 8000,
+            pr_id: 3,
+            pr_imagen: "assets/img/productos/placeholder3.webp",
+            pr_nombre: "Blanca Logo Negro",
+            pr_tipo: "Polera",
+            pr_marca: "Metallica",
+            pr_precio: 8000,
         },
         {
-            imagen: "assets/img/productos/placeholder5.webp",
-            nombre: "Polera 72 Seasons",
-            marca: "Metallica",
-            precio: 12000,
+            pr_id: 7,
+            pr_imagen: "assets/img/productos/placeholder5.webp",
+            pr_nombre: "72 Seasons",
+            pr_tipo: "Polera",
+            pr_marca: "Metallica",
+            pr_precio: 12000,
         },
     ]
     
-    constructor(private router:Router) {}
+    constructor(private router:Router) {
+    }
     
     ngOnInit() {
     }
@@ -38,13 +45,10 @@ export class CarritoPage implements OnInit {
     {
         let navExtras: NavigationExtras = {
             state:{
-              imagen: x.imagen,
-              nombre: x.nombre,
-              marca: x.marca,
-              precio: x.precio,
+                productoEnviado: x,
             }
         }
-
+        
         this.router.navigate(['/producto'], navExtras);
     }
     

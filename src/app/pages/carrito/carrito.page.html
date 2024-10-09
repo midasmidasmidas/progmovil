@@ -20,12 +20,12 @@
             <ion-col>
                 <ion-item class="producto">
                     <ion-button fill="clear" (click)="irProducto(x)">
-                        <img slot="start" src="{{x.imagen}}">
+                        <img slot="start" src="{{x.pr_imagen}}">
                     </ion-button>
                     <ion-label class="ion-padding-horizontal">
-                        <h2>{{x.nombre}}</h2>
-                        <h3>{{x.marca}}</h3>
-                        <p>${{x.precio}}</p>
+                        <h2>{{x.pr_nombre}}</h2>
+                        <h3>{{x.pr_marca}}</h3>
+                        <p>{{x.pr_tipo}} | ${{x.pr_precio}}</p>
                     </ion-label>
                     <ion-buttons>
                         <ion-button style="background-color: red">
