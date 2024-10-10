@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
     <ion-toolbar>
-        <ion-title>{{producto.pr_nombre}}</ion-title>
+        <ion-title>{{producto.pr_tipo}}: {{producto.pr_nombre}}</ion-title>
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
             <ion-back-button></ion-back-button>
@@ -21,7 +21,7 @@
             </ion-label>
         </ion-item>
 
-        <ion-button class="boton-azul" size="large">Añadir al Carrito</ion-button>
+        <ion-button (click)="addToCarrito(producto.pr_id)" class="boton-azul" size="large">Añadir al Carrito</ion-button>
         
         <h5><b>Admin</b></h5>
         <p style="font-size: 12px; color:rgb(84, 125, 201)">Esto se debe mostrar solo si el usuario es admin,

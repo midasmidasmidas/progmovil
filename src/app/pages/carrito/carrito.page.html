@@ -16,26 +16,39 @@
     </ion-header>
     
     <div id="container-alt">
-        <ion-row *ngFor="let x of carrito">
-            <ion-col>
-                <ion-item class="producto">
-                    <ion-button fill="clear" (click)="irProducto(x)">
-                        <img slot="start" src="{{x.pr_imagen}}">
-                    </ion-button>
-                    <ion-label class="ion-padding-horizontal">
-                        <h2>{{x.pr_nombre}}</h2>
-                        <h3>{{x.pr_marca}}</h3>
-                        <p>{{x.pr_tipo}} | ${{x.pr_precio}}</p>
-                    </ion-label>
-                    <ion-buttons>
-                        <ion-button style="background-color: red">
-                            <ion-icon style="color:white;" name="close"></ion-icon>
-                        </ion-button>
-                    </ion-buttons>
-                </ion-item>
-            </ion-col>
-        </ion-row>
-        
-        <ion-button class="boton-azul" size="large">Confirmar Compra</ion-button>
+        <div *ngIf="loading" class="spinner-container">
+            <ion-spinner name="circular"></ion-spinner>
+        </div>
+        <div *ngIf="!loading">
+            <div *ngIf="carrito.length > 0">
+                <ion-row *ngFor="let x of carrito">
+                    <ion-col>
+                        <ion-item class="producto">
+                            <ion-button fill="clear" (click)="irProducto(x)">
+                                <img slot="start" src="{{x.pr_imagen}}">
+                            </ion-button>
+                            <ion-label class="ion-padding-horizontal">
+                                <h2>{{x.pr_nombre}}</h2>
+                                <h3>{{x.pr_marca}}</h3>
+                                <p>{{x.pr_tipo}} | ${{x.pr_precio}}</p>
+                            </ion-label>
+                            <ion-buttons>
+                                <ion-button (click)="removerDeCarrito(x.pr_id)" style="background-color: red">
+                                    <ion-icon style="color:white;" name="close"></ion-icon>
+                                </ion-button>
+                            </ion-buttons>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+            </div>
+            <div *ngIf="carrito.length === 0">
+                <h2>No tienes elementos en tu carrito.</h2>
+                <ion-button [routerLink]="['/home']" class="boton-azul" size="large">Ir a Catalogo</ion-button>
+            </div>
+            <br>
+            <div *ngIf="carrito.length > 0">
+                <ion-button class="boton-azul" size="large">Confirmar Compra</ion-button>
+            </div>
+        </div>
     </div>
 </ion-content>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
@@ -17,8 +18,10 @@ export class ProductoPage implements OnInit {
         pr_precio: 1,
         pr_imagen: "assets/img/productos/placeholder1.webp",
     }
+
+    carritoIDs:number[] = [];
     
-    constructor(private router: Router, private activedroute: ActivatedRoute, private bd:ServicebdService) {
+    constructor(private router: Router, private activedroute: ActivatedRoute, private bd:ServicebdService, private nativeStorage:NativeStorage) {
         // realizar la captura de la informacion que viene por navigationExtras
         this.activedroute.queryParams.subscribe(param =>{
             // validamos si viene o no información
@@ -30,6 +33,21 @@ export class ProductoPage implements OnInit {
     }
     
     ngOnInit() {
+        this.nativeStorage.getItem("carrito")
+        .then(data => {
+                this.carritoIDs = data.array;
+            },
+            e => this.bd.presentAlert("Carrito de Compras", "Error consiguiendo carrito: " + JSON.stringify(e))
+        );
+    }
+
+    addToCarrito(x:number) {
+        this.carritoIDs.push(x);
+        this.nativeStorage.setItem("carrito", { array: this.carritoIDs })
+        .then(
+            () => this.bd.presentAlert("Carrito de Compras", "Producto añadido al carrito"),
+            e => this.bd.presentAlert("Carrito de Compras", "Error consiguiendo carrito: " + JSON.stringify(e))
+        );
     }
 
     modificar() {

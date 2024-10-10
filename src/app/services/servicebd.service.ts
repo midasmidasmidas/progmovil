@@ -8,7 +8,7 @@ import { AlertController, Platform } from '@ionic/angular';
     providedIn: 'root'
 })
 export class ServicebdService {
-
+    
     public database!: SQLiteObject;
     
     tablaProducto: string = "CREATE TABLE IF NOT EXISTS producto(pr_id INTEGER PRIMARY KEY autoincrement, pr_nombre VARCHAR(128) NOT NULL, pr_tipo VARCHAR(128) NOT NULL, pr_marca VARCHAR(128) NOT NULL, pr_precio INTEGER NOT NULL, pr_imagen TEXT NOT NULL);";
@@ -97,6 +97,28 @@ export class ServicebdService {
             }
             this.listadoProductos.next(items as any);
         })
+    }
+    
+    async consultarProductoPorId(id: string): Promise<Productos | null> {
+        try {
+            const res = await this.database.executeSql('SELECT * FROM producto WHERE pr_id = ?', [id]);
+            if (res.rows.length > 0) {
+                const item = res.rows.item(0);
+                return {
+                    pr_id: item.pr_id,
+                    pr_nombre: item.pr_nombre,
+                    pr_tipo: item.pr_tipo,
+                    pr_marca: item.pr_marca,
+                    pr_precio: item.pr_precio,
+                    pr_imagen: item.pr_imagen,
+                } as Productos;
+            } else {
+                return null;
+            }
+        } catch (e) {
+            this.presentAlert("Consultando Producto", "Error consultando producto: " + JSON.stringify(e));
+            return null;
+        }
     }
     
     modificarProducto(id:string, nombre:string, tipo: string, marca:string, precio:number, imagen:string) {
