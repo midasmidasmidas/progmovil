@@ -16,15 +16,15 @@
     </ion-header>
     
     <div id="container-alt">
-        <div *ngIf="imageSrc">
-            <img style="width:128px;" [src]="imageSrc" alt="Foto de Perfil" />
+        <div *ngIf="loading" class="spinner-container">
+            <ion-spinner name="circular"></ion-spinner>
         </div>
-        <div *ngIf="!imageSrc">
-            <img style="width:128px;" src="assets/img/user.png" alt="Foto de Perfil" />
-            <p>No tienes foto de perfil.</p>
+        <div *ngIf="!loading">
+            <img style="width:128px;" [src]="imageSrc" alt="Profile Picture" />
         </div>
+        
         <br>
-
+        
         <ion-button class="boton-azul" size="small" (click)="tomarFoto()">
             <ion-icon name="camera"></ion-icon>
             Cambiar Foto

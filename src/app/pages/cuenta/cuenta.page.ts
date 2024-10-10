@@ -9,11 +9,13 @@ import { CamaraService } from 'src/app/services/camara.service';
 })
 export class CuentaPage implements ViewWillEnter {
     
-    imageSrc: string = '';
+    imageSrc: string = "assets/img/user.png";
+    loading:boolean = false;
     
     constructor(private camara: CamaraService) {
+        this.loadImage();
     }
-
+    
     ionViewWillEnter(){
         this.loadImage();
     }
@@ -22,7 +24,12 @@ export class CuentaPage implements ViewWillEnter {
     }
     
     async loadImage() {
-        this.imageSrc = await this.camara.getImagenActual();
+        this.loading = true;
+        try {
+            this.imageSrc = await this.camara.getImagenActual();
+        } finally {
+            this.loading = false;
+        }
     }
     
 }

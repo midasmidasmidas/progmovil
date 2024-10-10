@@ -14,17 +14,16 @@
             <ion-title size="large">Cuenta</ion-title>
         </ion-toolbar>
     </ion-header>
-
+    
     <div id="container-alt">
-        <div *ngIf="imageSrc">
-            <img style="width:128px;" [src]="imageSrc" alt="Foto de Perfil" />
+        <div *ngIf="loading" class="spinner-container">
+            <ion-spinner name="circular"></ion-spinner>
         </div>
-        <div *ngIf="!imageSrc">
-            <img style="width:128px;" src="assets/img/user.png" alt="Foto de Perfil" />
-            <p>No tienes foto de perfil.</p>
+        <div *ngIf="!loading">
+            <img style="width:128px;" [src]="imageSrc" alt="Profile Picture" />
         </div>
         <h1>James</h1>
-
+        
         <h5><b>Cuenta</b></h5>
         <ion-list>
             <ion-item>
@@ -46,7 +45,7 @@
                 </ion-button>
             </ion-item>
         </ion-list>
-
+        
         <h5><b>Privacidad</b></h5>
         <ion-list>
             <ion-item>
@@ -56,19 +55,20 @@
                 </ion-button>
             </ion-item>
         </ion-list>
-
+        
         <h5><b>Admin</b></h5>
         <p style="font-size: 12px; color:rgb(84, 125, 201)">Esto se debe mostrar solo si el usuario es admin,
-        <br>pero como no es funcional todavía, se muestra siempre</p>
+            <br>pero como no es funcional todavía, se muestra siempre</p>
+            
+            <ion-list>
+                <ion-item>
+                    <ion-button class="boton-azul" [routerLink]="'/admin/add-ropa'" size="medium">
+                        <ion-icon slot="start" name="add"></ion-icon>
+                        Añadir Producto
+                    </ion-button>
+                </ion-item>
+            </ion-list>
+        </div>
         
-        <ion-list>
-            <ion-item>
-                <ion-button class="boton-azul" [routerLink]="'/admin/add-ropa'" size="medium">
-                    <ion-icon slot="start" name="add"></ion-icon>
-                    Añadir Producto
-                </ion-button>
-            </ion-item>
-        </ion-list>
-    </div>
+    </ion-content>
     
-</ion-content>

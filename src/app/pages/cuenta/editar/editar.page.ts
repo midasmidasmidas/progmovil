@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ViewWillEnter } from '@ionic/angular';
 import { CamaraService } from 'src/app/services/camara.service';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 
@@ -10,18 +11,24 @@ import { ServicebdService } from 'src/app/services/servicebd.service';
     templateUrl: './editar.page.html',
     styleUrls: ['./editar.page.scss'],
 })
-export class EditarPage implements OnInit {
+export class EditarPage implements OnInit, ViewWillEnter {
     
     nombre:string = "James";
     email:string = "james@72seasons.com";
     
-    imageSrc: string = "";
+    imageSrc: string = "assets/img/user.png";
+    loading:boolean = false;
     
-    constructor(private router:Router, private bd:ServicebdService, private camara:CamaraService, private alertController:AlertController) { }
+    constructor(private nativeStorage:NativeStorage, private bd:ServicebdService, private camara:CamaraService, private alertController:AlertController) { }
     
     ngOnInit() {
         this.cargarFotoDePerfil();
     }
+    
+    ionViewWillEnter(){
+        this.cargarFotoDePerfil();
+    }
+    
     
     async cargarFotoDePerfil() {
         this.imageSrc = await this.camara.getImagenActual();
@@ -44,36 +51,44 @@ export class EditarPage implements OnInit {
         
         await alert.present();
     }
-
+    
     async fotoDeCamara() {
+        this.loading = true;
         try {
             const image = await Camera.getPhoto({
                 quality: 90,
                 allowEditing: false,
-                resultType: CameraResultType.Uri,
+                resultType: CameraResultType.Base64,
                 source: CameraSource.Camera,
             });
             
-            this.imageSrc = image.webPath || "";
+            this.imageSrc = `data:image/jpeg;base64,${image.base64String}`;
+            await this.nativeStorage.setItem("fotoPerfil", { image: this.imageSrc });
             this.camara.setImagenActual(this.imageSrc);
         } catch(e) {
             this.bd.presentAlert("Tomando Foto", "Error tomando la foto");
+        } finally {
+            this.loading = false;
         }
     }
     
     async fotoDeGaleria() {
+        this.loading = true;
         try {
             const image = await Camera.getPhoto({
                 quality: 90,
                 allowEditing: false,
-                resultType: CameraResultType.Uri,
+                resultType: CameraResultType.Base64,
                 source: CameraSource.Photos,
             });
             
-            this.imageSrc = image.webPath || "";
+            this.imageSrc = `data:image/jpeg;base64,${image.base64String}`;
+            await this.nativeStorage.setItem("fotoPerfil", { image: this.imageSrc });
             this.camara.setImagenActual(this.imageSrc);
         } catch(e) {
             this.bd.presentAlert("Seleccionar Imagen", "Error seleccionando la imagen");
+        } finally {
+            this.loading = false;
         }
     }
     
