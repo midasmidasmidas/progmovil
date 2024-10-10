@@ -8,7 +8,7 @@ import { ServicebdService } from './servicebd.service';
 export class CamaraService {
     imageSrc: string = "";
     
-    constructor(private bd:ServicebdService) {}
+    constructor() {}
     
     async setImagenActual(image: string) {
         this.imageSrc = image;
