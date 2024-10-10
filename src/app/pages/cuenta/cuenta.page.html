@@ -16,7 +16,13 @@
     </ion-header>
 
     <div id="container-alt">
-        <img src="assets/img/user.png" style="width:128px;">
+        <div *ngIf="imageSrc">
+            <img style="width:128px;" [src]="imageSrc" alt="Foto de Perfil" />
+        </div>
+        <div *ngIf="!imageSrc">
+            <img style="width:128px;" src="assets/img/user.png" alt="Foto de Perfil" />
+            <p>No tienes foto de perfil.</p>
+        </div>
         <h1>James</h1>
 
         <h5><b>Cuenta</b></h5>

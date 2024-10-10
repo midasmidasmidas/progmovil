@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Camera, CameraResultType } from '@capacitor/camera';
+import { CamaraService } from 'src/app/services/camara.service';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
@@ -11,10 +13,32 @@ export class EditarPage implements OnInit {
     
     nombre:string = "James";
     email:string = "james@72seasons.com";
+
+    imageSrc: string = "";
     
-    constructor(private router:Router, private bd:ServicebdService) { }
+    constructor(private router:Router, private bd:ServicebdService, private camara:CamaraService) { }
     
     ngOnInit() {
+        this.cargarFotoDePerfil();
+    }
+
+    async cargarFotoDePerfil() {
+        this.imageSrc = await this.camara.getImagenActual();
+    }
+
+    async tomarFoto() {
+        try {
+            const image = await Camera.getPhoto({
+                quality: 90,
+                allowEditing: false,
+                resultType: CameraResultType.Uri,
+            });
+            
+            this.imageSrc = image.webPath || "";
+            this.camara.setImagenActual(this.imageSrc);
+        } catch(e) {
+            this.bd.presentAlert("Tomando Foto Imagen", "Error tomando la foto: " + JSON.stringify(e));
+        }
     }
     
     validarEditar() {

@@ -14,12 +14,22 @@
             <ion-title size="large">editar</ion-title>
         </ion-toolbar>
     </ion-header>
-
+    
     <div id="container-alt">
-        <img src="assets/img/user.png" style="width:128px;">
+        <div *ngIf="imageSrc">
+            <img style="width:128px;" [src]="imageSrc" alt="Foto de Perfil" />
+        </div>
+        <div *ngIf="!imageSrc">
+            <img style="width:128px;" src="assets/img/user.png" alt="Foto de Perfil" />
+            <p>No tienes foto de perfil.</p>
+        </div>
         <br>
-        <ion-button class="boton-azul" size="small">Cambiar Foto</ion-button>
 
+        <ion-button class="boton-azul" size="small" (click)="tomarFoto()">
+            <ion-icon name="camera"></ion-icon>
+            Cambiar Foto
+        </ion-button>
+        
         <ion-item>
             <ion-input [(ngModel)]="nombre" value="James" label="Nombre de Usuario" labelPlacement="stacked" placeholder="Editar nombre..."></ion-input>
         </ion-item>
