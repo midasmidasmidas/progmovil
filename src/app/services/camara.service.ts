@@ -18,7 +18,7 @@ export class CamaraService {
             this.imageSrc = data.image || "";
             this.setImagenActual(this.imageSrc);
         } catch(e) {
-            this.bd.presentAlert("Obteniendo Foto", "Error obteniendo la foto de perfil");
+            // this.bd.presentAlert("Obteniendo Foto", "Error obteniendo la foto de perfil");
         }
     }
     

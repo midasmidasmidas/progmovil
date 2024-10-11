@@ -20,29 +20,46 @@
                 <p>{{producto.pr_tipo}} | ${{producto.pr_precio}}</p>
             </ion-label>
         </ion-item>
+        
+        <ion-button (click)="addToCarrito(producto.pr_id)" class="boton-azul" size="large">
+            <ion-icon name="cart"></ion-icon>
+            Añadir al Carrito
+        </ion-button>
 
-        <ion-button (click)="addToCarrito(producto.pr_id)" class="boton-azul" size="large">Añadir al Carrito</ion-button>
+        <div *ngIf="!enWishlist">
+            <ion-button (click)="addToWishlist(producto.pr_id)" class="boton-azul" size="large">
+                <ion-icon name="heart"></ion-icon>
+                Añadir a Lista de Deseados
+            </ion-button>
+        </div>
+        <div *ngIf="enWishlist">
+            <ion-button (click)="removerDeWishlist(producto.pr_id)" class="boton-azul" size="large">
+                <ion-icon name="heart-dislike"></ion-icon>
+                Quitar de Lista de Deseados
+            </ion-button>
+        </div>
         
         <h5><b>Admin</b></h5>
         <p style="font-size: 12px; color:rgb(84, 125, 201)">Esto se debe mostrar solo si el usuario es admin,
-        <br>pero como no es funcional todavía, se muestra siempre</p>
-        
-        <ion-list>
-            <ion-item>
-                <ion-button class="boton-azul" size="medium" (click)="modificar()">
-                    <ion-icon slot="start" name="create"></ion-icon>
-                    Editar Producto
-                </ion-button>
-            </ion-item>
-            <ion-item>
+            <br>pero como no es funcional todavía, se muestra siempre</p>
+            
+            <ion-list>
+                <ion-item>
+                    <ion-button class="boton-azul" size="medium" (click)="modificar()">
+                        <ion-icon slot="start" name="create"></ion-icon>
+                        Editar Producto
+                    </ion-button>
+                </ion-item>
+                <ion-item>
                     <ion-buttons>
                         <ion-button style="background-color: red;" size="medium" (click)="eliminar()">
                             <ion-icon style="color: white;" slot="start" name="close"></ion-icon>
                             Eliminar Producto
                         </ion-button>
                     </ion-buttons>
-            </ion-item>
-        </ion-list>
-    </div>
-
-</ion-content>
+                </ion-item>
+            </ion-list>
+        </div>
+        
+    </ion-content>
+    

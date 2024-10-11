@@ -20,6 +20,9 @@ export class ProductoPage implements OnInit {
     }
 
     carritoIDs:number[] = [];
+
+    wishlistIDs:number[] = [];
+    enWishlist:boolean = false;
     
     constructor(private router: Router, private activedroute: ActivatedRoute, private bd:ServicebdService, private nativeStorage:NativeStorage) {
         // realizar la captura de la informacion que viene por navigationExtras
@@ -37,7 +40,14 @@ export class ProductoPage implements OnInit {
         .then(data => {
                 this.carritoIDs = data.array;
             },
-            e => this.bd.presentAlert("Carrito de Compras", "Error consiguiendo carrito: " + JSON.stringify(e))
+            // e => this.bd.presentAlert("Carrito de Compras", "Error consiguiendo carrito: " + JSON.stringify(e))
+        );
+
+        this.nativeStorage.getItem("wishlist")
+        .then(data => {
+                this.wishlistIDs = data.array;
+            },
+            // e => this.bd.presentAlert("Lista de Deseados", "Error consiguiendo lista de deseados: " + JSON.stringify(e))
         );
     }
 
@@ -48,6 +58,29 @@ export class ProductoPage implements OnInit {
             () => this.bd.presentAlert("Carrito de Compras", "Producto añadido al carrito"),
             e => this.bd.presentAlert("Carrito de Compras", "Error consiguiendo carrito: " + JSON.stringify(e))
         );
+    }
+
+    addToWishlist(x:number) {
+        this.wishlistIDs.push(x);
+        this.nativeStorage.setItem("wishlist", { array: this.wishlistIDs })
+        .then(
+            () => this.bd.presentAlert("Lista de Deseados", "Producto añadido a lista de deseados"),
+            e => this.bd.presentAlert("Lista de Deseados", "Error consiguiendo lista de deseados: " + JSON.stringify(e))
+        );
+        this.enWishlist = true;
+    }
+
+    removerDeWishlist(idRemover:number) {
+        const carritoIndex = this.wishlistIDs.findIndex((id: number) => id === idRemover);
+        if(carritoIndex !== -1) {
+            this.wishlistIDs.splice(carritoIndex, 1);
+            this.nativeStorage.setItem("wishlist", { array: this.wishlistIDs })
+            .then(
+                () => this.bd.presentAlert("Lista de Deseados", "Producto eliminado de lista de deseados"),
+                e => this.bd.presentAlert("Lista de Deseados", "Error consiguiendo lista de deseados: " + JSON.stringify(e))
+            );
+        }
+        this.enWishlist = false;
     }
 
     modificar() {
@@ -62,5 +95,6 @@ export class ProductoPage implements OnInit {
     
     eliminar() {
         this.bd.eliminarProducto(this.producto.pr_id);
+        this.router.navigate(['/home']);
     }
 }

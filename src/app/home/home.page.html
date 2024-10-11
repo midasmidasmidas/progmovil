@@ -20,19 +20,25 @@
         <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p> -->
 
         <ion-searchbar [debounce]="700" placeholder="Buscar..." show-clear-button="always" clear-icon="trash-bin" class="custom" (ionInput)="buscarProducto($event)"></ion-searchbar>
-        <ion-row *ngFor="let x of busqueda">
-            <ion-col>
-                <ion-item class="producto">
-                    <ion-button fill="clear" (click)="irProducto(x)">
-                        <img slot="start" src="{{x.pr_imagen}}">
-                    </ion-button>
-                    <ion-label class="ion-padding-horizontal">
-                            <h2>{{x.pr_nombre}}</h2>
-                            <h3>{{x.pr_marca}}</h3>
-                            <p>{{x.pr_tipo}} | ${{x.pr_precio}}</p>
-                    </ion-label>
-                </ion-item>
-            </ion-col>
-        </ion-row>
+        
+        <div *ngIf="busqueda.length > 0">
+            <ion-row *ngFor="let x of busqueda">
+                <ion-col>
+                    <ion-item class="producto">
+                        <ion-button fill="clear" (click)="irProducto(x)">
+                            <img slot="start" src="{{x.pr_imagen}}">
+                        </ion-button>
+                        <ion-label class="ion-padding-horizontal">
+                                <h2>{{x.pr_nombre}}</h2>
+                                <h3>{{x.pr_marca}}</h3>
+                                <p>{{x.pr_tipo}} | ${{x.pr_precio}}</p>
+                        </ion-label>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </div>
+        <div *ngIf="busqueda.length === 0">
+            <h2>No hay productos disponibles.</h2>
+        </div>
     </div>
 </ion-content>

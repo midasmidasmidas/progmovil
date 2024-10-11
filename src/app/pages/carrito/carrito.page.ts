@@ -61,7 +61,7 @@ export class CarritoPage implements OnInit {
                 }
             });
         } catch(e) {
-            this.bd.presentAlert("Carrito de Compras", "Error consiguiendo carrito: " + JSON.stringify(e))
+            // this.bd.presentAlert("Carrito de Compras", "Error consiguiendo carrito: " + JSON.stringify(e))
         } finally {
             this.loading = false;
         }
