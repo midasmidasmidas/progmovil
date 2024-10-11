@@ -21,20 +21,20 @@
             </ion-label>
         </ion-item>
         
-        <ion-button (click)="addToCarrito(producto.pr_id)" class="boton-azul" size="large">
-            <ion-icon name="cart"></ion-icon>
+        <ion-button (click)="addToCarrito(producto.pr_id)" class="boton-azul" size="medium">
+            <ion-icon name="cart" slot="end"></ion-icon>
             Añadir al Carrito
         </ion-button>
 
         <div *ngIf="!enWishlist">
-            <ion-button (click)="addToWishlist(producto.pr_id)" class="boton-azul" size="large">
-                <ion-icon name="heart"></ion-icon>
+            <ion-button (click)="addToWishlist(producto.pr_id)" class="boton-azul" size="medium">
+                <ion-icon name="heart" slot="end"></ion-icon>
                 Añadir a Lista de Deseados
             </ion-button>
         </div>
         <div *ngIf="enWishlist">
-            <ion-button (click)="removerDeWishlist(producto.pr_id)" class="boton-azul" size="large">
-                <ion-icon name="heart-dislike"></ion-icon>
+            <ion-button (click)="removerDeWishlist(producto.pr_id)" class="boton-azul" size="medium">
+                <ion-icon name="heart-dislike" slot="end"></ion-icon>
                 Quitar de Lista de Deseados
             </ion-button>
         </div>

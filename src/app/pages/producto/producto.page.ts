@@ -46,6 +46,7 @@ export class ProductoPage implements OnInit {
         this.nativeStorage.getItem("wishlist")
         .then(data => {
                 this.wishlistIDs = data.array;
+                this.enWishlist = this.wishlistIDs.includes(this.producto.pr_id);
             },
             // e => this.bd.presentAlert("Lista de Deseados", "Error consiguiendo lista de deseados: " + JSON.stringify(e))
         );
