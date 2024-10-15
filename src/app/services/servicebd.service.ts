@@ -3,6 +3,7 @@ import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Productos } from './productos';
 import { AlertController, Platform } from '@ionic/angular';
+import { Compras } from './compras';
 
 @Injectable({
     providedIn: 'root'
@@ -12,20 +13,17 @@ export class ServicebdService {
     public database!: SQLiteObject;
     
     tablaProducto: string = "CREATE TABLE IF NOT EXISTS producto(pr_id INTEGER PRIMARY KEY autoincrement, pr_nombre VARCHAR(128) NOT NULL, pr_tipo VARCHAR(128) NOT NULL, pr_marca VARCHAR(128) NOT NULL, pr_precio INTEGER NOT NULL, pr_imagen TEXT NOT NULL);";
-    
     registroProducto: string = "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (1, 'craneo', 'polera', 'metallica', 3000, 'assets/img/productos/placeholder1.webp')";
-    
     listadoProductos = new BehaviorSubject([]);
+
+    tablaCompra: string = "CREATE TABLE IF NOT EXISTS compra(compra_id INTEGER PRIMARY KEY autoincrement, compra_pr_id INTEGER NOT NULL, compra_precio INTEGER NOT NULL, compra_fecha TEXT NOT NULL, compra_user_id INTEGER NOT NULL);";
+    registroCompra: string = "INSERT OR IGNORE INTO compra(compra_id, compra_pr_id, compra_precio, compra_precio, compra_fecha, compra_user_id) VALUES (1, 3, 'st anger', 5000, '2024-10-15 19:39', 9);";
+    listadoCompras = new BehaviorSubject([]);
     
     private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
     
     constructor(private sqlite: SQLite, private platform: Platform, private alertController: AlertController) {
         this.crearBD();
-    }
-    
-    // funciones de retorno de observables
-    fetchProductos(): Observable<Productos[]>{
-        return this.listadoProductos.asObservable();
     }
     
     dbState(){
@@ -64,16 +62,27 @@ export class ServicebdService {
     }
     
     async crearTablas(){
-        try{
+        try {
             //mandar a ejecutar las tablas en el orden especifico
             await this.database.executeSql(this.tablaProducto,[]);
+            await this.database.executeSql(this.tablaCompra,[]);
             
             //generamos los insert en caso que existan
             await this.database.executeSql(this.registroProducto,[]);
+            await this.database.executeSql(this.registroCompra,[]);
             
-        }catch(e){
+        } catch(e) {
             this.presentAlert("Creación de Tabla", "Error creando las Tablas: " + JSON.stringify(e));
         }
+    }
+
+    // funciones de retorno de observables
+    fetchProductos(): Observable<Productos[]>{
+        return this.listadoProductos.asObservable();
+    }
+
+    fetchCompras(): Observable<Compras[]>{
+        return this.listadoCompras.asObservable();
     }
     
     consultarProductos(){
