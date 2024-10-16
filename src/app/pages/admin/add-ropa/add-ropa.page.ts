@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServicebdService } from 'src/app/services/servicebd.service';
+import { Usuarios } from 'src/app/services/usuarios';
 
 @Component({
     selector: 'app-add-ropa',
@@ -16,10 +17,21 @@ export class AddRopaPage implements OnInit {
         pr_marca: "",
         pr_precio: 1,
     }
+
+    usuarioActual:Usuarios | null = null;
     
-    constructor(private bd:ServicebdService) { }
+    constructor(private bd:ServicebdService, private router:Router) { }
     
     ngOnInit() {
+        // no muestra los botones para ir a la pagina de añadir o editar si no eres admin, pero por si acaso.
+        this.bd.fetchUsuarioActual().subscribe(user => {
+            this.usuarioActual = user;
+
+            if(user.user_tipo != 2) {
+                this.bd.presentAlert("Permisos", "No tienes permiso de entrar en esa pagina");
+                this.router.navigate(['/login']);
+            }
+        });
     }
     
     validarProducto() {

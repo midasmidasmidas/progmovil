@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServicebdService } from 'src/app/services/servicebd.service';
+import { Usuarios } from 'src/app/services/usuarios';
 
 @Component({
     selector: 'app-edit-ropa',
@@ -18,6 +19,8 @@ export class EditRopaPage implements OnInit {
         pr_imagen: "",
     }
 
+    usuarioActual:Usuarios | null = null;
+
     constructor(private router:Router, private activedroute: ActivatedRoute, private bd:ServicebdService) {
         // realizar la captura de la informacion que viene por navigationExtras
         this.activedroute.queryParams.subscribe(param =>{
@@ -30,6 +33,15 @@ export class EditRopaPage implements OnInit {
     }
     
     ngOnInit() {
+        // no muestra los botones para ir a la pagina de añadir o editar si no eres admin, pero por si acaso.
+        this.bd.fetchUsuarioActual().subscribe(user => {
+            this.usuarioActual = user;
+
+            if(user.user_tipo != 2) {
+                this.bd.presentAlert("Permisos", "No tienes permiso de entrar en esa pagina");
+                this.router.navigate(['/login']);
+            }
+        });
     }
 
     validarProducto() {
