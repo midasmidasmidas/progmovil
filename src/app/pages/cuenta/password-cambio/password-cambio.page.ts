@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServicebdService } from 'src/app/services/servicebd.service';
+import { Usuarios } from 'src/app/services/usuarios';
 
 @Component({
     selector: 'app-password-cambio',
@@ -11,10 +12,15 @@ export class PasswordCambioPage implements OnInit {
     
     pass1:string = "";
     pass2:string = "";
+
+    usuarioActual:Usuarios | null = null;
     
     constructor(private router:Router, private bd:ServicebdService) { }
     
     ngOnInit() {
+        this.bd.fetchUsuarioActual().subscribe(user => {
+            this.usuarioActual = user;
+        });
     }
     
     validarPassword() {
@@ -31,6 +37,13 @@ export class PasswordCambioPage implements OnInit {
         
         if(this.pass1 != this.pass2) {
             this.bd.presentAlert("Contraseñas No Coinciden", "Las contraseñas no coinciden.");
+            return;
+        }
+        
+        if(this.usuarioActual) {
+            this.bd.modificarUsuario(this.usuarioActual.user_nombre, this.usuarioActual.user_correo, this.pass1, this.usuarioActual.user_foto, this.usuarioActual.user_id);
+        } else {
+            this.bd.presentAlert("Datos no cargados", "Espere un momento antes de cambiar su contraseña");
             return;
         }
         

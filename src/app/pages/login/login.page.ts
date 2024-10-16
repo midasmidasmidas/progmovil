@@ -47,7 +47,7 @@ export class LoginPage implements OnInit {
         }
 
         try {
-            const user = await this.bd.usuarioLogin(this.email, this.pass1);
+            const user = await this.bd.usuarioLogin(this.email, this.pass1, this.nombre);
             if(user) {
                 this.bd.presentAlert("Iniciar Sesion", `Sesión iniciada con éxito.`);
                 this.router.navigate(['/home']);

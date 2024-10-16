@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServicebdService } from 'src/app/services/servicebd.service';
+import { Usuarios } from 'src/app/services/usuarios';
 
 @Component({
     selector: 'app-password-recuperar',
@@ -12,10 +13,15 @@ export class PasswordRecuperarPage implements OnInit {
     email:string = "";
     pass1:string = "";
     pass2:string = "";
+
+    usuarioActual:Usuarios | null = null;
     
     constructor(private router:Router, private bd:ServicebdService) { }
     
     ngOnInit() {
+        this.bd.fetchUsuarioActual().subscribe(user => {
+            this.usuarioActual = user;
+        });
     }
     
     validarPassword() {
