@@ -24,25 +24,27 @@ export class LoginPage implements OnInit {
     
     async confirmarLogin() {
         if(this.isLoggingIn) return; // no intentar el login multiples veces
+        this.isLoggingIn = true;
 
         if(this.email == "" || this.nombre == "" || this.pass1 == "") {
             this.bd.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
+            this.isLoggingIn = false;
             return;
         }
         
         const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if(!regexEmail.test(this.email)) {
             this.bd.presentAlert("Correo Inválido", "Se ha ingresado un correo con formato inválido. Intentelo de nuevo.");
+            this.isLoggingIn = false;
             return;
         }
         
         const regexPassword = /^(?=.*\d)(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
         if(!regexPassword.test(this.pass1)) {
             this.bd.presentAlert("Contraseña Incorrecta", "Intentelo de nuevo.");
+            this.isLoggingIn = false;
             return;
         }
-        
-        this.isLoggingIn = true;
 
         try {
             const user = await this.bd.usuarioLogin(this.email, this.pass1);
