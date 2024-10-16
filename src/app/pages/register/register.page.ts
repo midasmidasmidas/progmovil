@@ -19,7 +19,7 @@ export class RegisterPage implements OnInit {
     ngOnInit() {
     }
 
-    confirmarRegistro() {
+    async confirmarRegistro() {
         if(this.email == "" || this.nombre == "" || this.pass1 == "" || this.pass2 == "") {
             this.bd.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
             return;
@@ -42,6 +42,7 @@ export class RegisterPage implements OnInit {
             return;
         }
 
-        this.router.navigate(['/home']);
+        await this.bd.usuarioRegistrar(this.nombre, this.email, this.pass1);
+        this.router.navigate(['/login']);
     }
 }

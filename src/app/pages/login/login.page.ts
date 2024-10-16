@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { ServicebdService } from 'src/app/services/servicebd.service';
+import { Usuarios } from 'src/app/services/usuarios';
 
 @Component({
     selector: 'app-login',
@@ -13,16 +15,16 @@ export class LoginPage implements OnInit {
     nombre:string = "";
     pass1:string = "";
 
-    emailTest:string = "james@72seasons.com"
-    nombreTest:string = "James"
-    pass1Test:string = "BellTolls1!"
+    isLoggingIn:boolean = false;
     
-    constructor(private router:Router, private bd:ServicebdService) { }
+    constructor(private router:Router, private bd:ServicebdService, private nativeStorage:NativeStorage) { }
     
     ngOnInit() {
     }
     
-    confirmarLogin() {
+    async confirmarLogin() {
+        if(this.isLoggingIn) return; // no intentar el login multiples veces
+
         if(this.email == "" || this.nombre == "" || this.pass1 == "") {
             this.bd.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
             return;
@@ -33,19 +35,27 @@ export class LoginPage implements OnInit {
             this.bd.presentAlert("Correo Inválido", "Se ha ingresado un correo con formato inválido. Intentelo de nuevo.");
             return;
         }
-
+        
         const regexPassword = /^(?=.*\d)(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
         if(!regexPassword.test(this.pass1)) {
             this.bd.presentAlert("Contraseña Incorrecta", "Intentelo de nuevo.");
             return;
         }
-
-        // esto es exclusivamente para testeo del login. se debe reemplazar luego cuando hagamos sesiones reales
-        if(this.email != this.emailTest || this.nombre != this.nombreTest || this.pass1 != this.pass1Test) {
-            this.bd.presentAlert("Datos incorrectos.", "Intentelo de nuevo.");
-            return;
-        }
         
-        this.router.navigate(['/home']);
+        this.isLoggingIn = true;
+
+        try {
+            const user = await this.bd.usuarioLogin(this.email, this.pass1);
+            if(user) {
+                this.bd.presentAlert("Iniciar Sesion", `Sesión iniciada con éxito.`);
+                this.router.navigate(['/home']);
+            } else {
+                this.bd.presentAlert("Error al Iniciar Sesion", "Verifique los datos ingresados.");
+            }
+        } catch (e) {
+            this.bd.presentAlert("Error al Iniciar Sesion", "Verifique los datos ingresados: " + JSON.stringify(e));
+        } finally {
+            this.isLoggingIn = false;
+        }
     }
 }

@@ -4,6 +4,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Productos } from './productos';
 import { AlertController, Platform } from '@ionic/angular';
 import { Compras } from './compras';
+import { Usuarios } from './usuarios';
+import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +15,7 @@ export class ServicebdService {
     
     public database!: SQLiteObject;
     
-    tablaProducto: string = "CREATE TABLE IF NOT EXISTS producto(pr_id INTEGER PRIMARY KEY autoincrement, pr_nombre VARCHAR(128) NOT NULL, pr_tipo VARCHAR(128) NOT NULL, pr_marca VARCHAR(128) NOT NULL, pr_precio INTEGER NOT NULL, pr_imagen TEXT NOT NULL);";
+    tablaProducto: string = "CREATE TABLE IF NOT EXISTS producto(pr_id INTEGER PRIMARY KEY autoincrement, pr_nombre TEXT NOT NULL, pr_tipo TEXT NOT NULL, pr_marca TEXT NOT NULL, pr_precio INTEGER NOT NULL, pr_imagen TEXT NOT NULL);";
     registroProducto: string = "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (1, 'craneo', 'polera', 'metallica', 3000, 'assets/img/productos/placeholder1.webp')";
     listadoProductos = new BehaviorSubject([]);
     
@@ -20,10 +23,21 @@ export class ServicebdService {
     registroCompra: string = "INSERT OR IGNORE INTO compra(compra_id, compra_pr_id, compra_precio, compra_precio, compra_fecha, compra_user_id) VALUES (1, 3, 'st anger', 5000, '2024-10-15 19:39', 9);";
     listadoCompras = new BehaviorSubject([]);
     
+    tablaUsuario: string = "CREATE TABLE IF NOT EXISTS usuario(user_id INTEGER PRIMARY KEY autoincrement, user_tipo INTEGER NOT NULL, user_nombre TEXT NOT NULL, user_correo TEXT NOT NULL UNIQUE, user_pass TEXT NOT NULL, user_foto TEXT);";
+    registroUsuario: string[] = [
+        "INSERT or IGNORE INTO usuario(user_id, user_tipo, user_nombre, user_correo, user_pass, user_foto) VALUES (1, 1, 'james', 'user@usuario.com', 'UserPass1!', 'https://darak0z.github.io/img/smirnov/smirnov_thumbsUp.png');",
+        "INSERT or IGNORE INTO usuario(user_id, user_tipo, user_nombre, user_correo, user_pass) VALUES (2, 2, 'admin', 'admin@usuario.com', 'AdminPass1!');",
+    ]
+    listadoUsuarioActual = new BehaviorSubject<Usuarios>({ user_id: 0, user_tipo: 1, user_nombre: "", user_correo: "", user_pass: "", user_foto: ""}); // solo se guarda el actual. no se necesita guardar TODOS los usuarios.
+    
+    user_logged:boolean = false;
+    user_id:number = 0;
+    
     private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
     
-    constructor(private sqlite: SQLite, private platform: Platform, private alertController: AlertController) {
+    constructor(private sqlite: SQLite, private platform: Platform, private alertController: AlertController, private nativeStorage:NativeStorage) {
         this.crearBD();
+        this.checkLogin();
     }
     
     dbState(){
@@ -45,14 +59,15 @@ export class ServicebdService {
         this.platform.ready().then(()=>{
             // procedemos a crear la Base de Datos
             this.sqlite.create({
-                name: 'productos.db',
+                name: 'fashion.db',
                 location:'default'
-            }).then((db: SQLiteObject)=>{
+            }).then(async (db: SQLiteObject)=>{
                 // capturar y guardar la conexión a la Base de Datos
                 this.database = db;
                 // llamar a la función de creación de tablas
-                this.crearTablas();
+                await this.crearTablas();
                 this.consultarProductos();
+                this.consultarCompras();
                 // modificar el observable del status de la base de datos
                 this.isDBReady.next(true);
             }).catch(e=>{
@@ -66,10 +81,13 @@ export class ServicebdService {
             //mandar a ejecutar las tablas en el orden especifico
             await this.database.executeSql(this.tablaProducto,[]);
             await this.database.executeSql(this.tablaCompra,[]);
+            await this.database.executeSql(this.tablaUsuario,[]);
             
             //generamos los insert en caso que existan
             await this.database.executeSql(this.registroProducto,[]);
             await this.database.executeSql(this.registroCompra,[]);
+            await this.database.executeSql(this.registroUsuario[0],[]);
+            await this.database.executeSql(this.registroUsuario[1],[]);
             
         } catch(e) {
             this.presentAlert("Creación de Tabla", "Error creando las Tablas: " + JSON.stringify(e));
@@ -85,15 +103,41 @@ export class ServicebdService {
         return this.listadoCompras.asObservable();
     }
     
+    fetchUsuarioActual(): Observable<Usuarios>{
+        return this.listadoUsuarioActual.asObservable();
+    }
+    
+    async checkLogin() {
+        try {
+            const isLogged = await this.nativeStorage.getItem("user_logged");
+            if(isLogged) {
+                const user_id = await this.nativeStorage.getItem("user_id") || 0;
+                const user = await this.consultarUsuarioPorId(user_id.toString());
+                if(user && user_id > 0) {
+                    this.listadoUsuarioActual.next(user);
+                    this.user_logged = true;
+                    this.user_id = user_id;
+                }
+            }
+        } catch (error) {
+            console.error("Error checking login status:", error);
+        }
+    }
+    
+    async cerrarSesion() {
+        this.user_logged = false;
+        this.user_id = 0;
+        await this.nativeStorage.setItem("user_logged", false);
+        await this.nativeStorage.setItem("user_id", 0);
+        
+        this.listadoUsuarioActual.next({ user_id: 0, user_tipo: 1, user_nombre: "", user_correo: "", user_pass: "", user_foto: "" });
+    }
+    
     consultarProductos(){
         return this.database.executeSql('SELECT * FROM producto',[]).then(res=>{
-            // variable para almacenar el resultado de la consulta
             let items: Productos[] = [];
-            // verificar si tenemos registros en la consulta
             if(res.rows.length > 0){
-                //recorro el resultado
                 for(var i = 0; i < res.rows.length; i++){
-                    // agregar el registro a mi variable
                     items.push({
                         pr_id: res.rows.item(i).pr_id,
                         pr_nombre: res.rows.item(i).pr_nombre,
@@ -144,10 +188,62 @@ export class ServicebdService {
                     })
                 }
             }
-            this.listadoProductos.next(items as any);
+            this.listadoCompras.next(items as any);
         })
     }
     
+    async usuarioLogin(correo:string, pass:string): Promise<Usuarios | null> {
+        try {
+            const res = await this.database.executeSql('SELECT * FROM usuario WHERE user_correo = ? AND user_pass = ?', [correo, pass]);
+            if(res.rows.length > 0) {
+                const item = res.rows.item(0);
+                const usuario = {
+                    user_id: item.user_id,
+                    user_tipo: item.user_tipo,
+                    user_nombre: item.user_nombre,
+                    user_correo: item.user_correo,
+                    user_pass: item.user_pass,
+                    user_foto: item.user_foto,
+                } as Usuarios;
+                
+                this.user_logged = true;
+                this.user_id = usuario.user_id;
+                await this.nativeStorage.setItem("user_logged", true);
+                await this.nativeStorage.setItem("user_id", usuario.user_id);
+                
+                this.listadoUsuarioActual.next(usuario);
+
+                return usuario;
+            } else {
+                return null;
+            }
+        } catch (e) {
+            this.presentAlert("Iniciando Sesion", "Error iniciando sesion: " + JSON.stringify(e));
+            return null;
+        }
+    }
+    
+    async consultarUsuarioPorId(id: string): Promise<Usuarios | null> {
+        try {
+            const res = await this.database.executeSql('SELECT * FROM usuario WHERE user_id = ?', [id]);
+            if (res.rows.length > 0) {
+                const item = res.rows.item(0);
+                return {
+                    user_id: item.user_id,
+                    user_tipo: item.user_tipo,
+                    user_nombre: item.user_nombre,
+                    user_correo: item.user_correo,
+                    user_pass: item.user_pass,
+                    user_foto: item.user_foto,
+                } as Usuarios;
+            } else {
+                return null;
+            }
+        } catch (e) {
+            // this.presentAlert("Consultando Usuario", "Error consultando usuario: " + JSON.stringify(e));
+            return null;
+        }
+    }
     
     modificarProducto(id:string, nombre:string, tipo: string, marca:string, precio:number, imagen:string) {
         return this.database.executeSql('UPDATE producto SET pr_nombre = ?, pr_tipo = ?, pr_marca = ?, pr_precio = ?, pr_imagen = ? WHERE pr_id = ?',[nombre, tipo, marca, precio, imagen, id]).then(res=>{
@@ -156,17 +252,22 @@ export class ServicebdService {
         }).catch(e=>{
             this.presentAlert("Modificar", "Error: " + JSON.stringify(e));
         })
-        
     }
     
     modificarCompra(c_id:string, p_id:string, precio:number, fecha:string, u_id:number) {
         return this.database.executeSql('UPDATE compra SET compra_pr_id = ?, compra_precio = ?, compra_fecha = ?, compra_user_id = ? WHERE pr_id = ?',[p_id, precio, fecha, u_id, c_id]).then(res=>{
             this.presentAlert("Modificar", "Compra Modificada");
-            this.consultarProductos();
+            this.consultarCompras();
         }).catch(e=>{
             this.presentAlert("Modificar", "Error: " + JSON.stringify(e));
         })
-        
+    }
+    
+    modificarUsuario(nombre:string, correo:number, pass:string, u_id:number) {
+        // wip. multiples funciones para la foto, correo, contraseña, etc
+        // wip. multiples funciones para la foto, correo, contraseña, etc
+        // wip. multiples funciones para la foto, correo, contraseña, etc
+        // wip. multiples funciones para la foto, correo, contraseña, etc
     }
     
     eliminarProducto(id:string){
@@ -176,17 +277,15 @@ export class ServicebdService {
         }).catch(e=>{
             this.presentAlert("Eliminar", "Error: " + JSON.stringify(e));
         })
-        
     }
     
     eliminarCompra(id:string){
         return this.database.executeSql('DELETE FROM compra WHERE compra_id = ?',[id]).then(res=>{
             this.presentAlert("Eliminar", "Compra Eliminada");
-            this.consultarProductos();
+            this.consultarCompras();
         }).catch(e=>{
             this.presentAlert("Eliminar", "Error: " + JSON.stringify(e));
         })
-        
     }
     
     insertarProducto(nombre:string, tipo: string, marca:string, precio:number, imagen:string){
@@ -201,9 +300,17 @@ export class ServicebdService {
     insertarCompra(p_id:string, precio:number, fecha:string, u_id:number){
         return this.database.executeSql('INSERT INTO producto(compra_pr_id, compra_precio, compra_fecha, compra_user_id) VALUES (?,?,?,?)',[p_id, precio, fecha, u_id]).then(res=>{
             this.presentAlert("Insertar", "Compra Guardada");
-            this.consultarProductos();
+            this.consultarCompras();
         }).catch(e=>{
             this.presentAlert("Insertar", "Error: " + JSON.stringify(e));
+        })
+    }
+    
+    usuarioRegistrar(nombre:string, correo:string, pass:string) {
+        return this.database.executeSql('INSERT INTO usuario(user_tipo, user_nombre, user_correo, user_pass) VALUES (?,?,?,?)',[1, nombre, correo, pass]).then(res=>{
+            this.presentAlert("Registrar", "Cuenta creada con éxito");
+        }).catch(e=>{
+            this.presentAlert("Registrar", "Error: " + JSON.stringify(e));
         })
     }
     
