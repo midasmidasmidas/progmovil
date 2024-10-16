@@ -43,5 +43,6 @@ export class RegisterPage implements OnInit {
         }
 
         await this.bd.usuarioRegistrar(this.nombre, this.email, this.pass1);
+        this.router.navigate(['/home']);
     }
 }

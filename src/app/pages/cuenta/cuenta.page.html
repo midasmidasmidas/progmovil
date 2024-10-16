@@ -20,9 +20,9 @@
             <ion-spinner name="circular"></ion-spinner>
         </div>
         <div *ngIf="!loading">
-            <img style="width:128px;" [src]="imageSrc" alt="Profile Picture" />
+            <img style="width:128px;" [src]="usuarioActual?.user_foto" alt="Foto de Perfil" />
         </div>
-        <h1>James</h1>
+        <h1>{{usuarioActual?.user_nombre}}</h1>
         
         <h5><b>Cuenta</b></h5>
         <ion-list>
