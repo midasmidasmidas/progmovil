@@ -37,6 +37,12 @@ export class RegisterPage implements OnInit {
             return;
         }
 
+        const correoUsado = await this.bd.consultarCorreoRegistrado(this.email);
+        if(correoUsado) {
+            this.bd.presentAlert("Correo Existente", "Ya existe una cuenta usando este correo.");
+            return;
+        }
+
         if(this.pass1 != this.pass2) {
             this.bd.presentAlert("Contraseñas No Coinciden", "Las contraseñas no coinciden.");
             return;

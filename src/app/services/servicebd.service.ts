@@ -244,6 +244,11 @@ export class ServicebdService {
             return null;
         }
     }
+
+    async consultarCorreoRegistrado(correo: string): Promise<boolean> {
+        const res = await this.database.executeSql('SELECT * FROM usuario WHERE user_correo = ?', [correo]);
+        return res.rows.length > 0;
+    }
     
     modificarProducto(id:string, nombre:string, tipo: string, marca:string, precio:number, imagen:string) {
         return this.database.executeSql('UPDATE producto SET pr_nombre = ?, pr_tipo = ?, pr_marca = ?, pr_precio = ?, pr_imagen = ? WHERE pr_id = ?',[nombre, tipo, marca, precio, imagen, id]).then(res=>{
