@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ViewWillEnter } from '@ionic/angular';
 import { CamaraService } from 'src/app/services/camara.service';
+import { ServicebdService } from 'src/app/services/servicebd.service';
+import { Usuarios } from 'src/app/services/usuarios';
 
 @Component({
     selector: 'app-cuenta',
@@ -11,8 +13,10 @@ export class CuentaPage implements ViewWillEnter {
     
     imageSrc: string = "assets/img/user.png";
     loading:boolean = false;
+
+    usuarioActual:Usuarios | null = null;
     
-    constructor(private camara: CamaraService) {
+    constructor(private camara: CamaraService, private bd:ServicebdService) {
         this.loadImage();
     }
     
@@ -21,6 +25,9 @@ export class CuentaPage implements ViewWillEnter {
     }
     
     ngOnInit() {
+        this.bd.fetchUsuarioActual().subscribe(user => {
+            this.usuarioActual = user;
+        });
     }
     
     async loadImage() {

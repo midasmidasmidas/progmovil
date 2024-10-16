@@ -25,7 +25,7 @@
             <ion-icon name="cart" slot="end"></ion-icon>
             Añadir al Carrito
         </ion-button>
-
+        
         <div *ngIf="!enWishlist">
             <ion-button (click)="addToWishlist(producto.pr_id)" class="boton-azul" size="medium">
                 <ion-icon name="heart" slot="end"></ion-icon>
@@ -39,10 +39,8 @@
             </ion-button>
         </div>
         
-        <h5><b>Admin</b></h5>
-        <p style="font-size: 12px; color:rgb(84, 125, 201)">Esto se debe mostrar solo si el usuario es admin,
-            <br>pero como no es funcional todavía, se muestra siempre</p>
-            
+        <div *ngIf="usuarioActual?.user_tipo == 2">
+            <h5><b>Admin</b></h5>
             <ion-list>
                 <ion-item>
                     <ion-button class="boton-azul" size="medium" (click)="modificar()">
@@ -60,6 +58,6 @@
                 </ion-item>
             </ion-list>
         </div>
-        
-    </ion-content>
+    </div>
     
+</ion-content>

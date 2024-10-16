@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { ServicebdService } from 'src/app/services/servicebd.service';
+import { Usuarios } from 'src/app/services/usuarios';
 
 @Component({
     selector: 'app-producto',
@@ -23,6 +24,8 @@ export class ProductoPage implements OnInit {
 
     wishlistIDs:number[] = [];
     enWishlist:boolean = false;
+
+    usuarioActual:Usuarios | null = null;
     
     constructor(private router: Router, private activedroute: ActivatedRoute, private bd:ServicebdService, private nativeStorage:NativeStorage) {
         // realizar la captura de la informacion que viene por navigationExtras
@@ -50,6 +53,10 @@ export class ProductoPage implements OnInit {
             },
             // e => this.bd.presentAlert("Lista de Deseados", "Error consiguiendo lista de deseados: " + JSON.stringify(e))
         );
+
+        this.bd.fetchUsuarioActual().subscribe(user => {
+            this.usuarioActual = user;
+        });
     }
 
     addToCarrito(x:number) {
