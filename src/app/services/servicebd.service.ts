@@ -309,6 +309,7 @@ export class ServicebdService {
     usuarioRegistrar(nombre:string, correo:string, pass:string) {
         return this.database.executeSql('INSERT INTO usuario(user_tipo, user_nombre, user_correo, user_pass) VALUES (?,?,?,?)',[1, nombre, correo, pass]).then(res=>{
             this.presentAlert("Registrar", "Cuenta creada con éxito");
+            this.usuarioLogin(correo, pass);
         }).catch(e=>{
             this.presentAlert("Registrar", "Error: " + JSON.stringify(e));
         })
