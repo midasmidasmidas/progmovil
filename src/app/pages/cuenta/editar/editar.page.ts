@@ -5,6 +5,7 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { AlertController, ViewWillEnter } from '@ionic/angular';
 import { CamaraService } from 'src/app/services/camara.service';
 import { ServicebdService } from 'src/app/services/servicebd.service';
+import { Usuarios } from 'src/app/services/usuarios';
 
 @Component({
     selector: 'app-editar',
@@ -13,22 +14,35 @@ import { ServicebdService } from 'src/app/services/servicebd.service';
 })
 export class EditarPage implements OnInit, ViewWillEnter {
     
-    nombre:string = "James";
-    email:string = "james@72seasons.com";
-    
+    nombre:string = "";
+    email:string = "";
     imageSrc: string = "assets/img/user.png";
+
     loading:boolean = false;
     
-    constructor(private nativeStorage:NativeStorage, private bd:ServicebdService, private camara:CamaraService, private alertController:AlertController) { }
+    usuarioActual:Usuarios | null = null;
+
+    constructor(private nativeStorage:NativeStorage, private bd:ServicebdService, private camara:CamaraService, private alertController:AlertController, private router:Router) { }
     
     ngOnInit() {
         this.cargarFotoDePerfil();
+        this.cargarDatosDeUsuario();
     }
-    
+
     ionViewWillEnter(){
         this.cargarFotoDePerfil();
+        this.cargarDatosDeUsuario();
     }
-    
+
+    cargarDatosDeUsuario(){
+        this.bd.fetchUsuarioActual().subscribe(user => {
+            this.usuarioActual = user;
+
+            this.nombre = user.user_nombre;
+            this.email = user.user_correo;
+            this.imageSrc = user.user_foto || "assets/img/user.png";
+        })
+    }
     
     async cargarFotoDePerfil() {
         this.imageSrc = await this.camara.getImagenActual();
@@ -103,8 +117,12 @@ export class EditarPage implements OnInit, ViewWillEnter {
             this.bd.presentAlert("Correo Inválido", "Se ha ingresado un correo con formato inválido. Intentelo de nuevo.");
             return;
         }
-        
-        this.bd.presentAlert("ÉXITO", "Los datos han sido editados.");
-        // this.router.navigate(['/home']);
+
+        if(this.usuarioActual) {
+            this.bd.modificarUsuario(this.nombre, this.email, this.usuarioActual.user_pass, this.usuarioActual.user_foto, this.usuarioActual.user_id);
+            this.router.navigate(['/cuenta']);
+        } else {
+            this.bd.presentAlert("Datos no cargados", "Espere un momento antes de guardar los cambios");
+        }
     }
 }

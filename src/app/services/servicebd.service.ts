@@ -192,9 +192,9 @@ export class ServicebdService {
         })
     }
     
-    async usuarioLogin(correo:string, pass:string): Promise<Usuarios | null> {
+    async usuarioLogin(correo:string, pass:string, nombre:string): Promise<Usuarios | null> {
         try {
-            const res = await this.database.executeSql('SELECT * FROM usuario WHERE user_correo = ? AND user_pass = ?', [correo, pass]);
+            const res = await this.database.executeSql('SELECT * FROM usuario WHERE user_correo = ? AND user_pass = ? AND user_nombre = ?', [correo, pass, nombre]);
             if(res.rows.length > 0) {
                 const item = res.rows.item(0);
                 const usuario = {
@@ -263,11 +263,13 @@ export class ServicebdService {
         })
     }
     
-    modificarUsuario(nombre:string, correo:number, pass:string, u_id:number) {
-        // wip. multiples funciones para la foto, correo, contraseña, etc
-        // wip. multiples funciones para la foto, correo, contraseña, etc
-        // wip. multiples funciones para la foto, correo, contraseña, etc
-        // wip. multiples funciones para la foto, correo, contraseña, etc
+    modificarUsuario(nombre:string, correo:string, pass:string, foto:string, u_id:number) {
+        return this.database.executeSql('UPDATE usuario SET user_nombre = ?, user_correo = ?, user_pass = ?, user_foto = ? WHERE user_id = ?',[nombre, correo, pass, foto, u_id]).then(res=>{
+            this.presentAlert("Perfil", "Perfil Editado");
+            this.consultarCompras();
+        }).catch(e=>{
+            this.presentAlert("Perfil", "Error: " + JSON.stringify(e));
+        })
     }
     
     eliminarProducto(id:string){
@@ -309,7 +311,7 @@ export class ServicebdService {
     usuarioRegistrar(nombre:string, correo:string, pass:string) {
         return this.database.executeSql('INSERT INTO usuario(user_tipo, user_nombre, user_correo, user_pass) VALUES (?,?,?,?)',[1, nombre, correo, pass]).then(res=>{
             this.presentAlert("Registrar", "Cuenta creada con éxito");
-            this.usuarioLogin(correo, pass);
+            this.usuarioLogin(correo, pass, nombre);
         }).catch(e=>{
             this.presentAlert("Registrar", "Error: " + JSON.stringify(e));
         })

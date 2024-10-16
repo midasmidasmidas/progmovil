@@ -17,14 +17,19 @@ export class CuentaPage implements ViewWillEnter {
     usuarioActual:Usuarios | null = null;
     
     constructor(private camara: CamaraService, private bd:ServicebdService) {
-        this.loadImage();
     }
     
     ionViewWillEnter(){
         this.loadImage();
+        this.cargarDatosDeUsuario();
     }
     
     ngOnInit() {
+        this.loadImage();
+        this.cargarDatosDeUsuario();
+    }
+
+    cargarDatosDeUsuario() {
         this.bd.fetchUsuarioActual().subscribe(user => {
             this.usuarioActual = user;
         });
