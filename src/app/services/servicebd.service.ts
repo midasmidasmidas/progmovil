@@ -15,7 +15,7 @@ export class ServicebdService {
     tablaProducto: string = "CREATE TABLE IF NOT EXISTS producto(pr_id INTEGER PRIMARY KEY autoincrement, pr_nombre VARCHAR(128) NOT NULL, pr_tipo VARCHAR(128) NOT NULL, pr_marca VARCHAR(128) NOT NULL, pr_precio INTEGER NOT NULL, pr_imagen TEXT NOT NULL);";
     registroProducto: string = "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (1, 'craneo', 'polera', 'metallica', 3000, 'assets/img/productos/placeholder1.webp')";
     listadoProductos = new BehaviorSubject([]);
-
+    
     tablaCompra: string = "CREATE TABLE IF NOT EXISTS compra(compra_id INTEGER PRIMARY KEY autoincrement, compra_pr_id INTEGER NOT NULL, compra_precio INTEGER NOT NULL, compra_fecha TEXT NOT NULL, compra_user_id INTEGER NOT NULL);";
     registroCompra: string = "INSERT OR IGNORE INTO compra(compra_id, compra_pr_id, compra_precio, compra_precio, compra_fecha, compra_user_id) VALUES (1, 3, 'st anger', 5000, '2024-10-15 19:39', 9);";
     listadoCompras = new BehaviorSubject([]);
@@ -75,12 +75,12 @@ export class ServicebdService {
             this.presentAlert("Creación de Tabla", "Error creando las Tablas: " + JSON.stringify(e));
         }
     }
-
+    
     // funciones de retorno de observables
     fetchProductos(): Observable<Productos[]>{
         return this.listadoProductos.asObservable();
     }
-
+    
     fetchCompras(): Observable<Compras[]>{
         return this.listadoCompras.asObservable();
     }
@@ -130,9 +130,38 @@ export class ServicebdService {
         }
     }
     
+    consultarCompras(){
+        return this.database.executeSql('SELECT * FROM compra',[]).then(res=>{
+            let items: Compras[] = [];
+            if(res.rows.length > 0){
+                for(var i = 0; i < res.rows.length; i++){
+                    items.push({
+                        compra_id: res.rows.item(i).compra_id,
+                        compra_pr_id: res.rows.item(i).compra_pr_id,
+                        compra_user_id: res.rows.item(i).compra_user_id,
+                        compra_fecha: res.rows.item(i).compra_fecha,
+                        compra_precio: res.rows.item(i).compra_precio,
+                    })
+                }
+            }
+            this.listadoProductos.next(items as any);
+        })
+    }
+    
+    
     modificarProducto(id:string, nombre:string, tipo: string, marca:string, precio:number, imagen:string) {
         return this.database.executeSql('UPDATE producto SET pr_nombre = ?, pr_tipo = ?, pr_marca = ?, pr_precio = ?, pr_imagen = ? WHERE pr_id = ?',[nombre, tipo, marca, precio, imagen, id]).then(res=>{
             this.presentAlert("Modificar", "Producto Modificado");
+            this.consultarProductos();
+        }).catch(e=>{
+            this.presentAlert("Modificar", "Error: " + JSON.stringify(e));
+        })
+        
+    }
+    
+    modificarCompra(c_id:string, p_id:string, precio:number, fecha:string, u_id:number) {
+        return this.database.executeSql('UPDATE compra SET compra_pr_id = ?, compra_precio = ?, compra_fecha = ?, compra_user_id = ? WHERE pr_id = ?',[p_id, precio, fecha, u_id, c_id]).then(res=>{
+            this.presentAlert("Modificar", "Compra Modificada");
             this.consultarProductos();
         }).catch(e=>{
             this.presentAlert("Modificar", "Error: " + JSON.stringify(e));
@@ -150,6 +179,16 @@ export class ServicebdService {
         
     }
     
+    eliminarCompra(id:string){
+        return this.database.executeSql('DELETE FROM compra WHERE compra_id = ?',[id]).then(res=>{
+            this.presentAlert("Eliminar", "Compra Eliminada");
+            this.consultarProductos();
+        }).catch(e=>{
+            this.presentAlert("Eliminar", "Error: " + JSON.stringify(e));
+        })
+        
+    }
+    
     insertarProducto(nombre:string, tipo: string, marca:string, precio:number, imagen:string){
         return this.database.executeSql('INSERT INTO producto(pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (?,?,?,?,?)',[nombre, tipo, marca, precio, imagen]).then(res=>{
             this.presentAlert("Insertar", "Producto Guardado");
@@ -157,5 +196,28 @@ export class ServicebdService {
         }).catch(e=>{
             this.presentAlert("Insertar", "Error: " + JSON.stringify(e));
         })
+    }
+    
+    insertarCompra(p_id:string, precio:number, fecha:string, u_id:number){
+        return this.database.executeSql('INSERT INTO producto(compra_pr_id, compra_precio, compra_fecha, compra_user_id) VALUES (?,?,?,?)',[p_id, precio, fecha, u_id]).then(res=>{
+            this.presentAlert("Insertar", "Compra Guardada");
+            this.consultarProductos();
+        }).catch(e=>{
+            this.presentAlert("Insertar", "Error: " + JSON.stringify(e));
+        })
+    }
+    
+    formatearFechaActual():string {
+        const fechaActual = new Date();
+        
+        const dia = String(fechaActual.getDate()).padStart(2, '0');
+        const meses = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const mes = meses[fechaActual.getMonth()];
+        const anho = fechaActual.getFullYear();
+        
+        const hora = String(fechaActual.getHours()).padStart(2, '0');
+        const minuto = String(fechaActual.getMinutes()).padStart(2, '0');
+        
+        return `${dia}/${mes}/${anho} ${hora}:${minuto} UTC`;
     }
 }

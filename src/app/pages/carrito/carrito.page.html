@@ -47,7 +47,7 @@
             </div>
             <br>
             <div *ngIf="carrito.length > 0">
-                <ion-button class="boton-azul" size="large">Confirmar Compra</ion-button>
+                <ion-button (click)="confirmarCompra()" class="boton-azul" size="large">Confirmar Compra</ion-button>
             </div>
         </div>
     </div>

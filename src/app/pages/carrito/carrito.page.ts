@@ -36,9 +36,9 @@ export class CarritoPage implements OnInit {
             pr_precio: 12000,
         },
     ]
-
+    
     carritoIDs:number[] = [];
-
+    
     loading:boolean = false;
     
     constructor(private router:Router, private nativeStorage:NativeStorage, private bd:ServicebdService) {
@@ -47,32 +47,36 @@ export class CarritoPage implements OnInit {
     ngOnInit() {
         this.iniciarCarrito();
     }
-
+    
     async iniciarCarrito() {
         this.loading = true;
         try {
-            this.carrito = [];
             const data = await this.nativeStorage.getItem("carrito");
+            const invalidas:number[] = []; // las que hacen referencia a un producto que ya no esta en la base de datos (removido, cambio de id, etc)
+            this.carrito = [];
             this.carritoIDs = data.array || [];
-            this.carritoIDs.forEach(async id => {
+            await Promise.all(this.carritoIDs.map(async (id) => {
                 const producto = await this.bd.consultarProductoPorId(id.toString());
                 if(producto) {
                     this.carrito.push(producto);
+                } else {
+                    invalidas.push(id);
                 }
-            });
+            }));
+            this.carritoIDs = this.carritoIDs.filter(id => !invalidas.includes(id));
         } catch(e) {
             // this.bd.presentAlert("Carrito de Compras", "Error consiguiendo carrito: " + JSON.stringify(e))
         } finally {
             this.loading = false;
         }
     }
-
+    
     removerDeCarrito(idRemover:number) {
         const carritoIndex = this.carrito.findIndex((product: { pr_id: number; }) => product.pr_id === idRemover);
         if(carritoIndex !== -1) {
             this.carrito.splice(carritoIndex, 1);
             this.carritoIDs.splice(carritoIndex, 1);
-
+            
             this.nativeStorage.setItem("carrito", { array: this.carritoIDs })
             .then(
                 () => this.bd.presentAlert("Carrito de Compras", "Producto eliminado del carrito"),
@@ -80,7 +84,18 @@ export class CarritoPage implements OnInit {
             );
         }
     }
-
+    
+    confirmarCompra() {
+        this.carritoIDs.forEach(async id => {
+            const producto = await this.bd.consultarProductoPorId(id.toString());
+            if(producto) {
+                let fechaFormateada:string = this.bd.formatearFechaActual();
+                // this.bd.presentAlert("HOLA", `${this.carritoIDs.toString()} ||| ${fechaFormateada}`);
+                // this.bd.insertarCompra(producto.pr_id, producto.pr_precio, fechaFormateada, CURRENT USER ID AAAAAAAA);
+            }
+        });
+    }
+    
     irProducto(x:any)
     {
         let navExtras: NavigationExtras = {
