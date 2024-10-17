@@ -302,9 +302,9 @@ export class ServicebdService {
         })
     }
     
-    insertarCompra(p_id:string, precio:number, fecha:string, u_id:number){
-        return this.database.executeSql('INSERT INTO producto(compra_pr_id, compra_precio, compra_fecha, compra_user_id) VALUES (?,?,?,?)',[p_id, precio, fecha, u_id]).then(res=>{
-            this.presentAlert("Insertar", "Compra Guardada");
+    insertarCompra(p_id:number, precio:number, fecha:string, u_id:number){
+        return this.database.executeSql('INSERT INTO compra(compra_pr_id, compra_precio, compra_fecha, compra_user_id) VALUES (?,?,?,?)',[p_id, precio, fecha, u_id]).then(res=>{
+            // this.presentAlert("Insertar", "Compra Guardada");
             this.consultarCompras();
         }).catch(e=>{
             this.presentAlert("Insertar", "Error: " + JSON.stringify(e));

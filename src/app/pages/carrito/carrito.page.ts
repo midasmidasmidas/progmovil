@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { ServicebdService } from 'src/app/services/servicebd.service';
+import { Usuarios } from 'src/app/services/usuarios';
 
 @Component({
     selector: 'app-carrito',
@@ -40,12 +41,18 @@ export class CarritoPage implements OnInit {
     carritoIDs:number[] = [];
     
     loading:boolean = false;
+
+    usuarioActual:Usuarios | null = null;
     
     constructor(private router:Router, private nativeStorage:NativeStorage, private bd:ServicebdService) {
     }
     
     ngOnInit() {
         this.iniciarCarrito();
+
+        this.bd.fetchUsuarioActual().subscribe(user => {
+            this.usuarioActual = user;
+        });
     }
     
     async iniciarCarrito() {
@@ -88,10 +95,14 @@ export class CarritoPage implements OnInit {
     confirmarCompra() {
         this.carritoIDs.forEach(async id => {
             const producto = await this.bd.consultarProductoPorId(id.toString());
-            if(producto) {
+            if(producto && this.usuarioActual) {
                 let fechaFormateada:string = this.bd.formatearFechaActual();
-                // this.bd.presentAlert("HOLA", `${this.carritoIDs.toString()} ||| ${fechaFormateada}`);
-                // this.bd.insertarCompra(producto.pr_id, producto.pr_precio, fechaFormateada, CURRENT USER ID AAAAAAAA);
+                this.bd.insertarCompra(producto.pr_id, producto.pr_precio, fechaFormateada, this.usuarioActual.user_id);
+                
+                // vaciar carrito al comprar
+                this.carrito = [];
+                this.carritoIDs = [];
+                this.nativeStorage.setItem("carrito", { array: [] })
             }
         });
     }

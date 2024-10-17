@@ -1,16 +1,11 @@
 # Proyecto Semestral de Programación Movil
 
-## REQUISITOS
+## REQUISITOS (SOFTWARE)
 
-- Ionic
-- Angular
+- Toolkit de Ionic
+- Framework de Angular
 - Node.js
 - Android Studio (y un dispositivo con API nivel >=35)
-
-## LIBRERÍAS
-
-- NativeStorage
-- SQLite
 
 ## AL INSTALAR
 
