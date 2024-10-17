@@ -36,7 +36,6 @@ export class ServicebdService {
     
     constructor(private sqlite: SQLite, private platform: Platform, private alertController: AlertController, private nativeStorage:NativeStorage) {
         this.crearBD();
-        this.checkLogin();
     }
 
     dbState(){
@@ -67,6 +66,8 @@ export class ServicebdService {
                 await this.crearTablas();
                 this.consultarProductos();
                 this.consultarCompras();
+                // login al iniciar la app
+                this.checkLogin();
                 // modificar el observable del status de la base de datos
                 this.isDBReady.next(true);
             }).catch(e=>{
@@ -113,13 +114,11 @@ export class ServicebdService {
                 const user_id = await this.nativeStorage.getItem("user_id") || 0;
                 const user = await this.consultarUsuarioPorId(user_id.toString());
                 if(user && user_id > 0) {
-                    this.listadoUsuarioActual.next(user);
-                    this.user_logged = true;
-                    this.user_id = user_id;
+                    await this.usuarioLogin(user.user_correo, user.user_pass, user.user_nombre);
                 }
             }
-        } catch (error) {
-            console.error("Error checking login status:", error);
+        } catch(e) {
+            this.presentAlert("Iniciar Sesion", "Error iniciando sesion: " + JSON.stringify(e));
         }
     }
     
@@ -193,7 +192,7 @@ export class ServicebdService {
     
     async usuarioLogin(correo:string, pass:string, nombre:string): Promise<Usuarios | null> {
         try {
-            const res = await this.database.executeSql('SELECT * FROM usuario WHERE user_correo = ? AND user_pass = ?', [correo.toLowerCase(), pass, nombre]);
+            const res = await this.database.executeSql('SELECT * FROM usuario WHERE user_correo = ? AND user_pass = ? AND user_nombre = ?', [correo.toLowerCase(), pass, nombre]);
             if(res.rows.length > 0) {
                 const item = res.rows.item(0);
                 const usuario = {
