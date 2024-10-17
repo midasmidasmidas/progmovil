@@ -33,7 +33,7 @@
                                 <p>{{x.pr_tipo}} | ${{x.pr_precio}}</p>
                             </ion-label>
                             <ion-buttons>
-                                <ion-button (click)="removerDeCarrito(x.pr_id)" style="background-color: red">
+                                <ion-button (click)="removerDeCarrito(x.pr_id, x.pr_precio)" style="background-color: red">
                                     <ion-icon style="color:white;" name="close"></ion-icon>
                                 </ion-button>
                             </ion-buttons>
@@ -47,6 +47,9 @@
             </div>
             <br>
             <div *ngIf="carrito.length > 0">
+                <ion-item>
+                    Precio Total: ${{precioTotal}}
+                </ion-item>
                 <ion-button (click)="confirmarCompra()" class="boton-azul" size="large">Confirmar Compra</ion-button>
             </div>
         </div>

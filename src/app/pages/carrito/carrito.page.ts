@@ -43,6 +43,8 @@ export class CarritoPage implements OnInit {
     loading:boolean = false;
 
     usuarioActual:Usuarios | null = null;
+
+    precioTotal:number = 0;
     
     constructor(private router:Router, private nativeStorage:NativeStorage, private bd:ServicebdService) {
     }
@@ -62,10 +64,12 @@ export class CarritoPage implements OnInit {
             const invalidas:number[] = []; // las que hacen referencia a un producto que ya no esta en la base de datos (removido, cambio de id, etc)
             this.carrito = [];
             this.carritoIDs = data.array || [];
+            this.precioTotal = 0;
             await Promise.all(this.carritoIDs.map(async (id) => {
                 const producto = await this.bd.consultarProductoPorId(id.toString());
                 if(producto) {
                     this.carrito.push(producto);
+                    this.precioTotal += producto.pr_precio;
                 } else {
                     invalidas.push(id);
                 }
@@ -78,11 +82,13 @@ export class CarritoPage implements OnInit {
         }
     }
     
-    removerDeCarrito(idRemover:number) {
+    removerDeCarrito(idRemover:number, precio:number) {
         const carritoIndex = this.carrito.findIndex((product: { pr_id: number; }) => product.pr_id === idRemover);
         if(carritoIndex !== -1) {
             this.carrito.splice(carritoIndex, 1);
             this.carritoIDs.splice(carritoIndex, 1);
+
+            this.precioTotal -= precio;
             
             this.nativeStorage.setItem("carrito", { array: this.carritoIDs })
             .then(
