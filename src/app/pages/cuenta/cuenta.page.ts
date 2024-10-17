@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ViewWillEnter } from '@ionic/angular';
 import { CamaraService } from 'src/app/services/camara.service';
 import { ServicebdService } from 'src/app/services/servicebd.service';
@@ -9,7 +9,7 @@ import { Usuarios } from 'src/app/services/usuarios';
     templateUrl: './cuenta.page.html',
     styleUrls: ['./cuenta.page.scss'],
 })
-export class CuentaPage implements ViewWillEnter {
+export class CuentaPage implements ViewWillEnter, OnInit {
     
     imageSrc: string = "assets/img/user.png";
     loading:boolean = false;
@@ -32,6 +32,7 @@ export class CuentaPage implements ViewWillEnter {
     cargarDatosDeUsuario() {
         this.bd.fetchUsuarioActual().subscribe(user => {
             this.usuarioActual = user;
+            this.imageSrc = user.user_foto || "assets/img/user.png";
         });
     }
     
