@@ -49,7 +49,7 @@ export class HistorialPage implements OnInit {
                         compras.forEach(async (compra) => {
                             const producto = await this.bd.consultarProductoPorId(compra.compra_pr_id.toString());
                             if(producto) {
-                                this.historial.push(producto);
+                                this.historial.push({ ...producto, compra_fecha: compra.compra_fecha });
                             }
                         });
                     } catch(e) {
