@@ -6,7 +6,6 @@ import { AlertController, Platform } from '@ionic/angular';
 import { Compras } from './compras';
 import { Usuarios } from './usuarios';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
-import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -39,7 +38,7 @@ export class ServicebdService {
         this.crearBD();
         this.checkLogin();
     }
-    
+
     dbState(){
         return this.isDBReady.asObservable();
     }
@@ -194,7 +193,7 @@ export class ServicebdService {
     
     async usuarioLogin(correo:string, pass:string, nombre:string): Promise<Usuarios | null> {
         try {
-            const res = await this.database.executeSql('SELECT * FROM usuario WHERE user_correo = ? AND user_pass = ? AND user_nombre = ?', [correo, pass, nombre]);
+            const res = await this.database.executeSql('SELECT * FROM usuario WHERE user_correo = ? AND user_pass = ?', [correo.toLowerCase(), pass, nombre]);
             if(res.rows.length > 0) {
                 const item = res.rows.item(0);
                 const usuario = {
@@ -314,7 +313,7 @@ export class ServicebdService {
     }
     
     usuarioRegistrar(nombre:string, correo:string, pass:string) {
-        return this.database.executeSql('INSERT INTO usuario(user_tipo, user_nombre, user_correo, user_pass) VALUES (?,?,?,?)',[1, nombre, correo, pass]).then(res=>{
+        return this.database.executeSql('INSERT INTO usuario(user_tipo, user_nombre, user_correo, user_pass) VALUES (?,?,?,?)',[1, nombre, correo.toLowerCase(), pass]).then(res=>{
             this.presentAlert("Registrar", "Cuenta creada con éxito");
             this.usuarioLogin(correo, pass, nombre);
         }).catch(e=>{
