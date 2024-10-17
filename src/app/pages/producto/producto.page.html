@@ -21,22 +21,29 @@
             </ion-label>
         </ion-item>
         
-        <ion-button (click)="addToCarrito(producto.pr_id)" class="boton-azul" size="medium">
-            <ion-icon name="cart" slot="end"></ion-icon>
-            Añadir al Carrito
-        </ion-button>
-        
-        <div *ngIf="!enWishlist">
-            <ion-button (click)="addToWishlist(producto.pr_id)" class="boton-azul" size="medium">
-                <ion-icon name="heart" slot="end"></ion-icon>
-                Añadir a Lista de Deseados
+        <div *ngIf="bd.user_logged">
+            <ion-button (click)="addToCarrito(producto.pr_id)" class="boton-azul" size="medium">
+                <ion-icon name="cart" slot="end"></ion-icon>
+                Añadir al Carrito
             </ion-button>
+            
+            <div *ngIf="!enWishlist">
+                <ion-button (click)="addToWishlist(producto.pr_id)" class="boton-azul" size="medium">
+                    <ion-icon name="heart" slot="end"></ion-icon>
+                    Añadir a Lista de Deseados
+                </ion-button>
+            </div>
+            <div *ngIf="enWishlist">
+                <ion-button (click)="removerDeWishlist(producto.pr_id)" class="boton-azul" size="medium">
+                    <ion-icon name="heart-dislike" slot="end"></ion-icon>
+                    Quitar de Lista de Deseados
+                </ion-button>
+            </div>
         </div>
-        <div *ngIf="enWishlist">
-            <ion-button (click)="removerDeWishlist(producto.pr_id)" class="boton-azul" size="medium">
-                <ion-icon name="heart-dislike" slot="end"></ion-icon>
-                Quitar de Lista de Deseados
-            </ion-button>
+        <div *ngIf="!bd.user_logged">
+            <ion-item>
+                Inicia Sesion o Crea una cuenta para poder comprar productos y/o ponerlos en tu lista de deseados.
+            </ion-item>
         </div>
         
         <div *ngIf="usuarioActual?.user_tipo == 2">

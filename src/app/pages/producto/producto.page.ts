@@ -27,7 +27,7 @@ export class ProductoPage implements OnInit {
 
     usuarioActual:Usuarios | null = null;
     
-    constructor(private router: Router, private activedroute: ActivatedRoute, private bd:ServicebdService, private nativeStorage:NativeStorage) {
+    constructor(private router: Router, private activedroute: ActivatedRoute, public bd:ServicebdService, private nativeStorage:NativeStorage) {
         // realizar la captura de la informacion que viene por navigationExtras
         this.activedroute.queryParams.subscribe(param =>{
             // validamos si viene o no información
