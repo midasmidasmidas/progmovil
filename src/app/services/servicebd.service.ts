@@ -20,7 +20,7 @@ export class ServicebdService {
     
     tablaCompra: string = "CREATE TABLE IF NOT EXISTS compra(compra_id INTEGER PRIMARY KEY autoincrement, compra_pr_id INTEGER NOT NULL, compra_precio INTEGER NOT NULL, compra_fecha TEXT NOT NULL, compra_user_id INTEGER NOT NULL);";
     registroCompra: string = "INSERT OR IGNORE INTO compra(compra_id, compra_pr_id, compra_precio, compra_precio, compra_fecha, compra_user_id) VALUES (1, 3, 'st anger', 5000, '2024-10-15 19:39', 9);";
-    listadoCompras = new BehaviorSubject([]);
+    listadoComprasPorUsuario = new BehaviorSubject([]); // no es necesario mostrar TODAS las compras, asi que solo se guardan las del usuario
     
     tablaUsuario: string = "CREATE TABLE IF NOT EXISTS usuario(user_id INTEGER PRIMARY KEY autoincrement, user_tipo INTEGER NOT NULL, user_nombre TEXT NOT NULL, user_correo TEXT NOT NULL UNIQUE, user_pass TEXT NOT NULL, user_foto TEXT);";
     registroUsuario: string[] = [
@@ -65,7 +65,6 @@ export class ServicebdService {
                 // llamar a la función de creación de tablas
                 await this.crearTablas();
                 this.consultarProductos();
-                this.consultarCompras();
                 // login al iniciar la app
                 this.checkLogin();
                 // modificar el observable del status de la base de datos
@@ -99,8 +98,8 @@ export class ServicebdService {
         return this.listadoProductos.asObservable();
     }
     
-    fetchCompras(): Observable<Compras[]>{
-        return this.listadoCompras.asObservable();
+    fetchComprasPorUsuario(): Observable<Compras[]>{
+        return this.listadoComprasPorUsuario.asObservable();
     }
     
     fetchUsuarioActual(): Observable<Usuarios>{
@@ -172,22 +171,22 @@ export class ServicebdService {
         }
     }
     
-    consultarCompras(){
-        return this.database.executeSql('SELECT * FROM compra',[]).then(res=>{
-            let items: Compras[] = [];
-            if(res.rows.length > 0){
-                for(var i = 0; i < res.rows.length; i++){
-                    items.push({
-                        compra_id: res.rows.item(i).compra_id,
-                        compra_pr_id: res.rows.item(i).compra_pr_id,
-                        compra_user_id: res.rows.item(i).compra_user_id,
-                        compra_fecha: res.rows.item(i).compra_fecha,
-                        compra_precio: res.rows.item(i).compra_precio,
-                    })
-                }
+    async consultarComprasPorUsuario(u_id:number){
+        const res = await this.database.executeSql('SELECT * FROM compra WHERE compra_user_id = ?', [u_id]);
+        let items: Compras[] = [];
+        if (res.rows.length > 0) {
+            for (var i = 0; i < res.rows.length; i++) {
+                items.push({
+                    compra_id: res.rows.item(i).compra_id,
+                    compra_pr_id: res.rows.item(i).compra_pr_id,
+                    compra_user_id: res.rows.item(i).compra_user_id,
+                    compra_fecha: res.rows.item(i).compra_fecha,
+                    compra_precio: res.rows.item(i).compra_precio,
+                });
             }
-            this.listadoCompras.next(items as any);
-        })
+        }
+        this.listadoComprasPorUsuario.next(items as any);
+        return items;
     }
     
     async usuarioLogin(correo:string, pass:string, nombre:string): Promise<Usuarios | null> {
@@ -260,7 +259,6 @@ export class ServicebdService {
     modificarCompra(c_id:string, p_id:string, precio:number, fecha:string, u_id:number) {
         return this.database.executeSql('UPDATE compra SET compra_pr_id = ?, compra_precio = ?, compra_fecha = ?, compra_user_id = ? WHERE pr_id = ?',[p_id, precio, fecha, u_id, c_id]).then(res=>{
             this.presentAlert("Modificar", "Compra Modificada");
-            this.consultarCompras();
         }).catch(e=>{
             this.presentAlert("Modificar", "Error: " + JSON.stringify(e));
         })
@@ -269,7 +267,6 @@ export class ServicebdService {
     modificarUsuario(nombre:string, correo:string, pass:string, foto:string, u_id:number) {
         return this.database.executeSql('UPDATE usuario SET user_nombre = ?, user_correo = ?, user_pass = ?, user_foto = ? WHERE user_id = ?',[nombre, correo, pass, foto, u_id]).then(res=>{
             this.presentAlert("Perfil", "Perfil Editado");
-            this.consultarCompras();
         }).catch(e=>{
             this.presentAlert("Perfil", "Error: " + JSON.stringify(e));
         })
@@ -287,7 +284,6 @@ export class ServicebdService {
     eliminarCompra(id:string){
         return this.database.executeSql('DELETE FROM compra WHERE compra_id = ?',[id]).then(res=>{
             this.presentAlert("Eliminar", "Compra Eliminada");
-            this.consultarCompras();
         }).catch(e=>{
             this.presentAlert("Eliminar", "Error: " + JSON.stringify(e));
         })
@@ -305,7 +301,6 @@ export class ServicebdService {
     insertarCompra(p_id:number, precio:number, fecha:string, u_id:number){
         return this.database.executeSql('INSERT INTO compra(compra_pr_id, compra_precio, compra_fecha, compra_user_id) VALUES (?,?,?,?)',[p_id, precio, fecha, u_id]).then(res=>{
             // this.presentAlert("Insertar", "Compra Guardada");
-            this.consultarCompras();
         }).catch(e=>{
             this.presentAlert("Insertar", "Error: " + JSON.stringify(e));
         })

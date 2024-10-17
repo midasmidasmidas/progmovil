@@ -105,6 +105,8 @@ export class CarritoPage implements OnInit {
                 this.nativeStorage.setItem("carrito", { array: [] })
             }
         });
+
+        this.bd.presentAlert("Compra", "Compra completada con éxito");
     }
     
     irProducto(x:any)

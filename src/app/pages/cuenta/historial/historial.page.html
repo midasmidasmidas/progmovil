@@ -14,19 +14,29 @@
             <ion-title size="large">Historial</ion-title>
         </ion-toolbar>
     </ion-header>
-
-    <ion-row *ngFor="let x of historial">
-        <ion-col>
-            <ion-item class="producto">
-                <ion-button fill="clear" (click)="irProducto(x)">
-                    <img slot="start" src="{{x.imagen}}">
-                </ion-button>
-                <ion-label class="ion-padding-horizontal">
-                    <h2>{{x.nombre}}</h2>
-                    <h3>{{x.fecha}}</h3>
-                    <p>${{x.precio}}</p>
-                </ion-label>
-            </ion-item>
-        </ion-col>
-    </ion-row>
+    
+    <div *ngIf="!loading">
+        <div *ngIf="historial.length > 0">
+            <ion-row *ngFor="let x of historial">
+                <ion-col>
+                    <ion-item class="producto">
+                        <ion-button fill="clear" (click)="irProducto(x)">
+                            <img slot="start" src="{{x.pr_imagen}}">
+                        </ion-button>
+                        <ion-label class="ion-padding-horizontal">
+                            <h2>{{x.pr_nombre}}</h2>
+                            <h3>{{x.pr_marca}}</h3>
+                            <p>{{x.pr_tipo}} | ${{x.pr_precio}}</p>
+                        </ion-label>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </div>
+        
+        <div *ngIf="historial.length === 0">
+            <h2>No tienes elementos en tu historial.</h2>
+            <ion-button [routerLink]="['/home']" class="boton-azul" size="large">Ir a Catalogo</ion-button>
+        </div>
+    </div>
+    
 </ion-content>
