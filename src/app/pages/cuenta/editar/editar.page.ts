@@ -34,14 +34,13 @@ export class EditarPage implements OnInit, ViewWillEnter {
         this.cargarDatosDeUsuario();
     }
 
-    cargarDatosDeUsuario(){
-        this.bd.fetchUsuarioActual().subscribe(user => {
-            this.usuarioActual = user;
+    async cargarDatosDeUsuario(){
+        const userID = await this.nativeStorage.getItem("user_id");
+        this.usuarioActual = await this.bd.consultarUsuarioPorId(userID);
 
-            this.nombre = user.user_nombre;
-            this.email = user.user_correo;
-            this.imageSrc = user.user_foto || "assets/img/user.png";
-        })
+        this.nombre = this.usuarioActual?.user_nombre || "";
+        this.email = this.usuarioActual?.user_correo || "";
+        this.imageSrc = this.usuarioActual?.user_foto || "assets/img/user.png";
     }
     
     async cargarFotoDePerfil() {
@@ -106,7 +105,7 @@ export class EditarPage implements OnInit, ViewWillEnter {
         }
     }
     
-    validarEditar() {
+    async validarEditar() {
         if(this.nombre == "" || this.email == "") {
             this.bd.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
             return;
@@ -118,8 +117,14 @@ export class EditarPage implements OnInit, ViewWillEnter {
             return;
         }
 
+        const correoUsado = await this.bd.consultarCorreoRegistrado(this.email);
+        if(correoUsado && this.email != this.usuarioActual?.user_correo) {
+            this.bd.presentAlert("Correo Existente", "Ya existe una cuenta usando este correo.");
+            return;
+        }
+
         if(this.usuarioActual) {
-            this.bd.modificarUsuario(this.nombre, this.email, this.usuarioActual.user_pass, this.usuarioActual.user_foto, this.usuarioActual.user_id);
+            this.bd.usuarioEditar(this.nombre, this.email, this.usuarioActual.user_pass, this.usuarioActual.user_foto, this.usuarioActual.user_id);
             this.router.navigate(['/cuenta']);
         } else {
             this.bd.presentAlert("Datos no cargados", "Espere un momento antes de guardar los cambios");

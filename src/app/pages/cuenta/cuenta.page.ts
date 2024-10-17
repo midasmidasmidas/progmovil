@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { ViewWillEnter } from '@ionic/angular';
 import { CamaraService } from 'src/app/services/camara.service';
 import { ServicebdService } from 'src/app/services/servicebd.service';
@@ -16,7 +17,7 @@ export class CuentaPage implements ViewWillEnter, OnInit {
 
     usuarioActual:Usuarios | null = null;
     
-    constructor(private camara: CamaraService, private bd:ServicebdService) {
+    constructor(private camara: CamaraService, private bd:ServicebdService, private nativeStorage:NativeStorage) {
     }
     
     ionViewWillEnter(){
@@ -29,11 +30,10 @@ export class CuentaPage implements ViewWillEnter, OnInit {
         this.cargarDatosDeUsuario();
     }
 
-    cargarDatosDeUsuario() {
-        this.bd.fetchUsuarioActual().subscribe(user => {
-            this.usuarioActual = user;
-            this.imageSrc = user.user_foto || "assets/img/user.png";
-        });
+    async cargarDatosDeUsuario() {
+        const userID = await this.nativeStorage.getItem("user_id");
+        this.usuarioActual = await this.bd.consultarUsuarioPorId(userID);
+        this.imageSrc = this.usuarioActual?.user_foto || "assets/img/user.png";
     }
     
     async loadImage() {

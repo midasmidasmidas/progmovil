@@ -264,7 +264,7 @@ export class ServicebdService {
         })
     }
     
-    modificarUsuario(nombre:string, correo:string, pass:string, foto:string, u_id:number) {
+    usuarioEditar(nombre:string, correo:string, pass:string, foto:string, u_id:number) {
         return this.database.executeSql('UPDATE usuario SET user_nombre = ?, user_correo = ?, user_pass = ?, user_foto = ? WHERE user_id = ?',[nombre, correo, pass, foto, u_id]).then(res=>{
             this.presentAlert("Perfil", "Perfil Editado");
         }).catch(e=>{

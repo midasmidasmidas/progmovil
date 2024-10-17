@@ -41,7 +41,7 @@ export class PasswordCambioPage implements OnInit {
         }
         
         if(this.usuarioActual) {
-            this.bd.modificarUsuario(this.usuarioActual.user_nombre, this.usuarioActual.user_correo, this.pass1, this.usuarioActual.user_foto, this.usuarioActual.user_id);
+            this.bd.usuarioEditar(this.usuarioActual.user_nombre, this.usuarioActual.user_correo, this.pass1, this.usuarioActual.user_foto, this.usuarioActual.user_id);
         } else {
             this.bd.presentAlert("Datos no cargados", "Espere un momento antes de cambiar su contraseña");
             return;
