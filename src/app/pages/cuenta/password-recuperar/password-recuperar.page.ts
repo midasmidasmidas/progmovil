@@ -47,6 +47,13 @@ export class PasswordRecuperarPage implements OnInit {
             return;
         }
 
+        if(this.usuarioActual) {
+            this.bd.usuarioEditar(this.usuarioActual.user_nombre, this.usuarioActual.user_correo, this.pass1, this.usuarioActual.user_foto, this.usuarioActual.user_id);
+        } else {
+            this.bd.presentAlert("Datos no cargados", "Espere un momento antes de recuperar su contraseña");
+            return;
+        }
+
         this.router.navigate(['/home']);
     }
 }
