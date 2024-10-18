@@ -242,6 +242,21 @@ export class ServicebdService {
         }
     }
 
+    async consultarFotoPorId(id: string): Promise<string | null> {
+        try {
+            const res = await this.database.executeSql('SELECT user_foto FROM usuario WHERE user_id = ?', [id]);
+            if (res.rows.length > 0) {
+                const item = res.rows.item(0);
+                return item.user_foto;
+            } else {
+                return null;
+            }
+        } catch (e) {
+            // this.presentAlert("Consultando Usuario", "Error consultando usuario: " + JSON.stringify(e));
+            return null;
+        }
+    }
+
     async consultarCorreoRegistrado(correo: string): Promise<boolean> {
         const res = await this.database.executeSql('SELECT * FROM usuario WHERE user_correo = ?', [correo]);
         return res.rows.length > 0;
@@ -271,7 +286,7 @@ export class ServicebdService {
             this.presentAlert("Perfil", "Error: " + JSON.stringify(e));
         })
     }
-    
+
     eliminarProducto(id:string){
         return this.database.executeSql('DELETE FROM producto WHERE pr_id = ?',[id]).then(res=>{
             this.presentAlert("Eliminar", "Producto Eliminado");

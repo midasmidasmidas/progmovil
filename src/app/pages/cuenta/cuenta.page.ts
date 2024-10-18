@@ -12,37 +12,32 @@ import { Usuarios } from 'src/app/services/usuarios';
 })
 export class CuentaPage implements ViewWillEnter, OnInit {
     
-    imageSrc: string = "assets/img/user.png";
     loading:boolean = false;
 
     usuarioActual:Usuarios | null = null;
     
-    constructor(private camara: CamaraService, private bd:ServicebdService, private nativeStorage:NativeStorage) {
+    constructor(public camara: CamaraService, private bd:ServicebdService, private nativeStorage:NativeStorage) {
     }
     
     ionViewWillEnter(){
-        this.loadImage();
         this.cargarDatosDeUsuario();
+        this.camara.cargarFotoDePerfil();
     }
     
     ngOnInit() {
-        this.loadImage();
         this.cargarDatosDeUsuario();
+        this.camara.cargarFotoDePerfil();
     }
 
     async cargarDatosDeUsuario() {
-        const userID = await this.nativeStorage.getItem("user_id");
-        this.usuarioActual = await this.bd.consultarUsuarioPorId(userID);
-        this.imageSrc = this.usuarioActual?.user_foto || "assets/img/user.png";
-    }
-    
-    async loadImage() {
         this.loading = true;
         try {
-            this.imageSrc = await this.camara.getImagenActual();
+            const userID = await this.nativeStorage.getItem("user_id");
+            this.usuarioActual = await this.bd.consultarUsuarioPorId(userID);
+        } catch(e) {
+
         } finally {
             this.loading = false;
         }
     }
-    
 }

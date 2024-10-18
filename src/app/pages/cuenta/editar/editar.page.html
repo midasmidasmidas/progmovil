@@ -16,16 +16,16 @@
     </ion-header>
     
     <div id="container-alt">
-        <div *ngIf="loading" class="spinner-container">
+        <div *ngIf="camara.loading" class="spinner-container">
             <ion-spinner name="circular"></ion-spinner>
         </div>
-        <div *ngIf="!loading">
-            <img style="width:128px;" [src]="imageSrc" alt="Profile Picture" />
+        <div *ngIf="!camara.loading">
+            <img style="width:128px;" [src]="camara.imageSrc" alt="Profile Picture" />
         </div>
         
         <br>
         
-        <ion-button class="boton-azul" size="small" (click)="tomarFoto()">
+        <ion-button class="boton-azul" size="small" (click)="camara.tomarFoto()">
             <ion-icon name="camera"></ion-icon>
             Cambiar Foto
         </ion-button>
