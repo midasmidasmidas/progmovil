@@ -13,11 +13,11 @@ export class ProductoPage implements OnInit {
     
     producto:any = {
         pr_id: 1,
-        pr_nombre: "NOMBRE",
-        pr_tipo: "TIPO",
-        pr_marca: "MARCA",
-        pr_precio: 1,
-        pr_imagen: "assets/img/productos/placeholder1.webp",
+        pr_nombre: "Cargando...",
+        pr_tipo: "Cargando...",
+        pr_marca: "Cargando...",
+        pr_precio: 0,
+        pr_imagen: "",
     }
 
     carritoIDs:number[] = [];
