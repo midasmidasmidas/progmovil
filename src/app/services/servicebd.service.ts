@@ -16,7 +16,22 @@ export class ServicebdService {
     public database!: SQLiteObject;
     
     tablaProducto: string = "CREATE TABLE IF NOT EXISTS producto(pr_id INTEGER PRIMARY KEY autoincrement, pr_nombre TEXT NOT NULL, pr_tipo TEXT NOT NULL, pr_marca TEXT NOT NULL, pr_precio INTEGER NOT NULL, pr_imagen TEXT NOT NULL);";
-    registroProducto: string = "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (1, 'craneo', 'polera', 'metallica', 3000, 'assets/img/productos/placeholder1.webp')";
+    registroProducto: string[] = [
+        "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (1, 'Kill Em All', 'Poleron', 'Metallica', 18000, 'assets/img/productos/1.webp')",
+        "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (2, 'Craneo Flameante', 'Polera', 'Metallica', 14000, 'assets/img/productos/2.webp')",
+        "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (3, 'Logo Blanco', 'Polera', 'Metallica', 12000, 'assets/img/productos/3.webp')",
+        "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (4, 'Master Of Puppets', 'Polera', 'Metallica', 14000, 'assets/img/productos/4.webp')",
+        "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (5, '72 Seasons', 'Polera', 'Metallica', 13000, 'assets/img/productos/5.webp')",
+        "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (6, 'KIll Em All', 'Polera', 'Metallica', 14000, 'assets/img/productos/6.webp')",
+        "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (7, 'Logo M72', 'Polera', 'Metallica', 12000, 'assets/img/productos/7.webp')",
+        "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (8, 'Ride The Lightning', 'Poleron', 'Metallica', 18000, 'assets/img/productos/8.webp')",
+        "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (9, 'Through The Never', 'Poleron', 'Metallica', 17000, 'assets/img/productos/9.webp')",
+        "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (10, 'Anivesario 30', 'Polera', 'Metallica', 14000, 'assets/img/productos/10.webp')",
+        "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (11, 'Craneo Mecanico', 'Polera', 'Metallica x Fortnite', 16000, 'assets/img/productos/11.webp')",
+        "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (12, 'Call Of Ktulu', 'Polera', 'Metallica', 13000, 'assets/img/productos/12.webp')",
+        "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (13, 'St. Anger', 'Polera', 'Metallica', 13000, 'assets/img/productos/13.webp')",
+        "INSERT or IGNORE INTO producto(pr_id, pr_nombre, pr_tipo, pr_marca, pr_precio, pr_imagen) VALUES (14, 'Death Magnetic', 'Polera', 'Metallica', 13000, 'assets/img/productos/14.webp')",
+    ]
     listadoProductos = new BehaviorSubject([]);
     
     tablaCompra: string = "CREATE TABLE IF NOT EXISTS compra(compra_id INTEGER PRIMARY KEY autoincrement, compra_pr_id INTEGER NOT NULL, compra_precio INTEGER NOT NULL, compra_fecha TEXT NOT NULL, compra_user_id INTEGER NOT NULL);";
@@ -84,7 +99,10 @@ export class ServicebdService {
             await this.database.executeSql(this.tablaUsuario,[]);
             
             //generamos los insert en caso que existan
-            await this.database.executeSql(this.registroProducto,[]);
+            for(const sentencia of this.registroProducto) {
+                await this.database.executeSql(sentencia, []);
+            }
+
             await this.database.executeSql(this.registroCompra,[]);
             await this.database.executeSql(this.registroUsuario[0],[]);
             await this.database.executeSql(this.registroUsuario[1],[]);
