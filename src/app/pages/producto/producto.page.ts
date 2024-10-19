@@ -94,7 +94,7 @@ export class ProductoPage implements OnInit {
     modificar() {
         let navExtras: NavigationExtras = {
             state: {
-                productoEnviado: this.producto
+                idProducto: this.producto.pr_id
             }
         }
 

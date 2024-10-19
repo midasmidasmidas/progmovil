@@ -23,11 +23,12 @@ export class EditRopaPage implements OnInit {
 
     constructor(private router:Router, private activedroute: ActivatedRoute, private bd:ServicebdService) {
         // realizar la captura de la informacion que viene por navigationExtras
-        this.activedroute.queryParams.subscribe(param =>{
+        this.activedroute.queryParams.subscribe(async param =>{
             // validamos si viene o no información
             if(this.router.getCurrentNavigation()?.extras.state){
                 // capturamos la informacion
-                this.producto = this.router.getCurrentNavigation()?.extras?.state?.['productoEnviado'];
+                const productoID = this.router.getCurrentNavigation()?.extras?.state?.['idProducto'];
+                this.producto = await this.bd.consultarProductoPorId(productoID);
             }
         });
     }
@@ -45,7 +46,7 @@ export class EditRopaPage implements OnInit {
     }
 
     validarProducto() {
-        if(this.producto.pr_imagen == "" || this.producto.pr_nombre == "" || this.producto.pr_marca == "" || this.producto.pr_tipo == "") {
+        if(this.producto.pr_imagen.trim() == "" || this.producto.pr_nombre.trim() == "" || this.producto.pr_marca.trim() == "" || this.producto.pr_tipo.trim() == "") {
             this.bd.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
             return;
         }
@@ -55,6 +56,7 @@ export class EditRopaPage implements OnInit {
             return;
         }
 
+        this.bd.modificarProducto(this.producto.pr_id, this.producto.pr_nombre, this.producto.pr_tipo, this.producto.pr_marca, this.producto.pr_precio, this.producto.pr_imagen);
         this.router.navigate(['/home']);
     }
 }
