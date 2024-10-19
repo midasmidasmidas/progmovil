@@ -53,7 +53,7 @@ export class ServicebdService {
     constructor(private sqlite: SQLite, private platform: Platform, private alertController: AlertController, private nativeStorage:NativeStorage, private router:Router) {
         this.crearBD();
     }
-
+    
     dbState(){
         return this.isDBReady.asObservable();
     }
@@ -102,7 +102,7 @@ export class ServicebdService {
             for(const sentencia of this.registroProducto) {
                 await this.database.executeSql(sentencia, []);
             }
-
+            
             await this.database.executeSql(this.registroCompra,[]);
             await this.database.executeSql(this.registroUsuario[0],[]);
             await this.database.executeSql(this.registroUsuario[1],[]);
@@ -127,13 +127,17 @@ export class ServicebdService {
     
     async checkLogin() {
         try {
-            const isLogged = await this.nativeStorage.getItem("user_logged");
+            // en caso de error (i.e. codigo 2 retornar nulo pq el item no existe), retornar falso y 0 respectivamente, y seguir con normalidad
+            const isLogged = await this.nativeStorage.getItem("user_logged").catch(() => false);
+            const user_id = await this.nativeStorage.getItem("user_id").catch(() => 0);
             if(isLogged) {
-                const user_id = await this.nativeStorage.getItem("user_id") || 0;
                 const user = await this.consultarUsuarioPorId(user_id.toString());
                 if(user && user_id > 0) {
                     await this.usuarioLogin(user.user_correo, user.user_pass, user.user_nombre);
                 }
+            } else {
+                this.user_logged = false;
+                this.user_id = 0;
             }
         } catch(e) {
             this.presentAlert("Iniciar Sesion", "Error iniciando sesion: " + JSON.stringify(e));
@@ -147,7 +151,7 @@ export class ServicebdService {
         await this.nativeStorage.setItem("user_id", 0);
         
         this.listadoUsuarioActual.next({ user_id: 0, user_tipo: 1, user_nombre: "", user_correo: "", user_pass: "", user_foto: "" });
-
+        
         this.router.navigate(['/home']);
     }
     
@@ -230,7 +234,7 @@ export class ServicebdService {
                 await this.nativeStorage.setItem("user_id", usuario.user_id);
                 
                 this.listadoUsuarioActual.next(usuario);
-
+                
                 return usuario;
             } else {
                 return null;
@@ -262,7 +266,7 @@ export class ServicebdService {
             return null;
         }
     }
-
+    
     async consultarFotoPorId(id: string): Promise<string | null> {
         try {
             const res = await this.database.executeSql('SELECT user_foto FROM usuario WHERE user_id = ?', [id]);
@@ -277,7 +281,7 @@ export class ServicebdService {
             return null;
         }
     }
-
+    
     async consultarCorreoRegistrado(correo: string): Promise<boolean> {
         const res = await this.database.executeSql('SELECT * FROM usuario WHERE user_correo = ?', [correo]);
         return res.rows.length > 0;
@@ -307,7 +311,7 @@ export class ServicebdService {
             this.presentAlert("Perfil", "Error: " + JSON.stringify(e));
         })
     }
-
+    
     eliminarProducto(id:string){
         return this.database.executeSql('DELETE FROM producto WHERE pr_id = ?',[id]).then(res=>{
             this.presentAlert("Eliminar", "Producto Eliminado");
@@ -324,7 +328,7 @@ export class ServicebdService {
             this.presentAlert("Eliminar", "Error: " + JSON.stringify(e));
         })
     }
-
+    
     async eliminarUsuario(id:string){
         try {
             const res = await this.database.executeSql('DELETE FROM usuario WHERE user_id = ?', [id]);
