@@ -38,15 +38,22 @@ export class ServicebdService {
     registroCompra: string = "INSERT OR IGNORE INTO compra(compra_id, compra_pr_id, compra_precio, compra_precio, compra_fecha, compra_user_id) VALUES (1, 3, 'st anger', 5000, '2024-10-15 19:39', 9);";
     listadoComprasPorUsuario = new BehaviorSubject([]); // no es necesario mostrar TODAS las compras, asi que solo se guardan las del usuario
     
-    tablaUsuario: string = "CREATE TABLE IF NOT EXISTS usuario(user_id INTEGER PRIMARY KEY autoincrement, user_tipo INTEGER NOT NULL, user_nombre TEXT NOT NULL, user_correo TEXT NOT NULL UNIQUE, user_pass TEXT NOT NULL, user_foto TEXT);";
+    tablaUsuario: string = "CREATE TABLE IF NOT EXISTS usuario(user_id INTEGER PRIMARY KEY autoincrement, user_tipo INTEGER NOT NULL, user_nombre TEXT NOT NULL, user_correo TEXT NOT NULL UNIQUE, user_pass TEXT NOT NULL, user_foto TEXT, user_pregunta INTEGER NOT NULL, user_respuesta TEXT NOT NULL);";
     registroUsuario: string[] = [
-        "INSERT or IGNORE INTO usuario(user_id, user_tipo, user_nombre, user_correo, user_pass, user_foto) VALUES (1, 1, 'james', 'user@usuario.com', 'UserPass1!', 'https://darak0z.github.io/img/smirnov/smirnov_thumbsUp.png');",
-        "INSERT or IGNORE INTO usuario(user_id, user_tipo, user_nombre, user_correo, user_pass) VALUES (2, 2, 'admin', 'admin@usuario.com', 'AdminPass1!');",
+        "INSERT or IGNORE INTO usuario(user_id, user_tipo, user_nombre, user_correo, user_pass, user_foto, user_pregunta, user_respuesta) VALUES (1, 1, 'james', 'user@usuario.com', 'UserPass1!', 'https://darak0z.github.io/img/smirnov/smirnov_thumbsUp.png', 0, 'rocco');",
+        "INSERT or IGNORE INTO usuario(user_id, user_tipo, user_nombre, user_correo, user_pass, user_pregunta, user_respuesta) VALUES (2, 2, 'admin', 'admin@usuario.com', 'AdminPass1!', 1, 'vainilla');",
     ]
-    listadoUsuarioActual = new BehaviorSubject<Usuarios>({ user_id: 0, user_tipo: 1, user_nombre: "", user_correo: "", user_pass: "", user_foto: ""}); // solo se guarda el actual. no se necesita guardar TODOS los usuarios.
+    listadoUsuarioActual = new BehaviorSubject<Usuarios>({ user_id: 0, user_tipo: 1, user_nombre: "", user_correo: "", user_pass: "", user_foto: "", user_pregunta: 0, user_respuesta: "" }); // solo se guarda el actual. no se necesita guardar TODOS los usuarios.
     
     user_logged:boolean = false;
     user_id:number = 0;
+
+    preguntas:string[] = [
+        "¿Cual fue/es el nombre de tu primera mascota?",
+        "¿Cual es tu sabor de helado favorito?",
+        "¿Donde conociste a tu mejor amigo?",
+        "¿Cual es tu album musical favorito?",
+    ]
     
     private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
     
@@ -150,7 +157,7 @@ export class ServicebdService {
         await this.nativeStorage.setItem("user_logged", false);
         await this.nativeStorage.setItem("user_id", 0);
         
-        this.listadoUsuarioActual.next({ user_id: 0, user_tipo: 1, user_nombre: "", user_correo: "", user_pass: "", user_foto: "" });
+        this.listadoUsuarioActual.next({ user_id: 0, user_tipo: 1, user_nombre: "", user_correo: "", user_pass: "", user_foto: "", user_pregunta: 0, user_respuesta: "" });
         
         this.router.navigate(['/home']);
     }
@@ -226,6 +233,8 @@ export class ServicebdService {
                     user_correo: item.user_correo,
                     user_pass: item.user_pass,
                     user_foto: item.user_foto,
+                    user_pregunta: item.user_pregunta,
+                    user_respuesta: item.user_respuesta,
                 } as Usuarios;
                 
                 this.user_logged = true;
@@ -257,6 +266,32 @@ export class ServicebdService {
                     user_correo: item.user_correo,
                     user_pass: item.user_pass,
                     user_foto: item.user_foto,
+                    user_pregunta: item.user_pregunta,
+                    user_respuesta: item.user_respuesta,
+                } as Usuarios;
+            } else {
+                return null;
+            }
+        } catch (e) {
+            // this.presentAlert("Consultando Usuario", "Error consultando usuario: " + JSON.stringify(e));
+            return null;
+        }
+    }
+
+    async consultarUsuarioPorCorreo(correo: string): Promise<Usuarios | null> {
+        try {
+            const res = await this.database.executeSql('SELECT * FROM usuario WHERE user_correo = ?', [correo]);
+            if (res.rows.length > 0) {
+                const item = res.rows.item(0);
+                return {
+                    user_id: item.user_id,
+                    user_tipo: item.user_tipo,
+                    user_nombre: item.user_nombre,
+                    user_correo: item.user_correo,
+                    user_pass: item.user_pass,
+                    user_foto: item.user_foto,
+                    user_pregunta: item.user_pregunta,
+                    user_respuesta: item.user_respuesta,
                 } as Usuarios;
             } else {
                 return null;
@@ -286,6 +321,11 @@ export class ServicebdService {
         const res = await this.database.executeSql('SELECT * FROM usuario WHERE user_correo = ?', [correo]);
         return res.rows.length > 0;
     }
+
+    async consultarPreguntaDeSeguridad(correo:string, respuesta:string): Promise<boolean> {
+        const res = await this.database.executeSql('SELECT * FROM usuario WHERE user_correo = ? AND user_respuesta = ?', [correo.toLowerCase(), respuesta.toLowerCase()]);
+        return res.rows.length > 0;
+    }
     
     modificarProducto(id:string, nombre:string, tipo: string, marca:string, precio:number, imagen:string) {
         return this.database.executeSql('UPDATE producto SET pr_nombre = ?, pr_tipo = ?, pr_marca = ?, pr_precio = ?, pr_imagen = ? WHERE pr_id = ?',[nombre, tipo, marca, precio, imagen, id]).then(res=>{
@@ -306,7 +346,7 @@ export class ServicebdService {
     
     usuarioEditar(nombre:string, correo:string, pass:string, foto:string, u_id:number) {
         return this.database.executeSql('UPDATE usuario SET user_nombre = ?, user_correo = ?, user_pass = ?, user_foto = ? WHERE user_id = ?',[nombre, correo, pass, foto, u_id]).then(res=>{
-            this.presentAlert("Perfil", "Perfil Editado");
+            // this.presentAlert("Perfil", "Perfil Editado");
         }).catch(e=>{
             this.presentAlert("Perfil", "Error: " + JSON.stringify(e));
         })
@@ -355,8 +395,8 @@ export class ServicebdService {
         })
     }
     
-    usuarioRegistrar(nombre:string, correo:string, pass:string) {
-        return this.database.executeSql('INSERT INTO usuario(user_tipo, user_nombre, user_correo, user_pass) VALUES (?,?,?,?)',[1, nombre, correo.toLowerCase(), pass]).then(res=>{
+    usuarioRegistrar(nombre:string, correo:string, pass:string, pregunta:string, respuesta:string) {
+        return this.database.executeSql('INSERT INTO usuario(user_tipo, user_nombre, user_correo, user_pass, user_pregunta, user_respuesta) VALUES (?,?,?,?,?,?)',[1, nombre, correo.toLowerCase(), pass, pregunta, respuesta.toLowerCase()]).then(res=>{
             this.presentAlert("Registrar", "Cuenta creada con éxito");
             this.usuarioLogin(correo, pass, nombre);
         }).catch(e=>{

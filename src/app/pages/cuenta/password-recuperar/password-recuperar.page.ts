@@ -14,6 +14,10 @@ export class PasswordRecuperarPage implements OnInit {
     pass1:string = "";
     pass2:string = "";
 
+    pregunta:string = "Ingrese su correo primero.";
+    respuesta:string = "";
+    correoVerificado:boolean = false;
+
     usuarioActual:Usuarios | null = null;
     
     constructor(private router:Router, private bd:ServicebdService) { }
@@ -23,8 +27,25 @@ export class PasswordRecuperarPage implements OnInit {
             this.usuarioActual = user;
         });
     }
+
+    async validarCorreo() {
+        const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if(!regexEmail.test(this.email)) {
+            this.correoVerificado = false;
+            this.pregunta = "Ingrese su correo primero.";
+        } else {
+            const user = await this.bd.consultarUsuarioPorCorreo(this.email);
+            if(user) {
+                this.pregunta = this.bd.preguntas[user!.user_pregunta];
+                this.correoVerificado = true;
+            } else {
+                this.pregunta = "Ingrese su correo primero.";
+                this.correoVerificado = false;
+            }
+        }
+    }
     
-    validarPassword() {
+    async validarPassword() {
         if(this.email == "" || this.pass1 == "" || this.pass2 == "") {
             this.bd.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
             return;
@@ -34,6 +55,15 @@ export class PasswordRecuperarPage implements OnInit {
         if(!regexEmail.test(this.email)) {
             this.bd.presentAlert("Correo Inválido", "Se ha ingresado un correo con formato inválido. Intentelo de nuevo.");
             return;
+        } else {
+            const user = await this.bd.consultarUsuarioPorCorreo(this.email);
+            if(user) {
+                this.pregunta = this.bd.preguntas[user!.user_pregunta];
+                this.correoVerificado = true;
+            } else {
+                this.pregunta = "Ingrese su correo primero.";
+                this.correoVerificado = false;
+            }
         }
 
         const regex = /^(?=.*\d)(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
@@ -47,13 +77,24 @@ export class PasswordRecuperarPage implements OnInit {
             return;
         }
 
+        const respuestaVerificada = await this.bd.consultarPreguntaDeSeguridad(this.email, this.respuesta)
+        if(!respuestaVerificada)
+        {
+            this.bd.presentAlert("Pregunta de Seguridad", "La respuesta está incorrecta.");
+            return;
+        }
+
         if(this.usuarioActual) {
-            this.bd.usuarioEditar(this.usuarioActual.user_nombre, this.usuarioActual.user_correo, this.pass1, this.usuarioActual.user_foto, this.usuarioActual.user_id);
+            if(this.correoVerificado) {
+                this.bd.usuarioEditar(this.usuarioActual.user_nombre, this.usuarioActual.user_correo, this.pass1, this.usuarioActual.user_foto, this.usuarioActual.user_id);
+                this.bd.presentAlert("Éxito", "Contraseña Recuperada.");
+                this.router.navigate(['/home']);
+            } else {
+                this.bd.presentAlert("Correo Invalido", "Ingrese el correo del que quiera recuperar la contraseña.");
+            }
         } else {
             this.bd.presentAlert("Datos no cargados", "Espere un momento antes de recuperar su contraseña");
             return;
         }
-
-        this.router.navigate(['/home']);
     }
 }

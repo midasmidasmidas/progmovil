@@ -13,6 +13,9 @@ export class RegisterPage implements OnInit {
     nombre:string = "";
     pass1:string = "";
     pass2:string = "";
+
+    pregunta:string = "0";
+    respuesta:string = "";
     
     constructor(private router:Router, private bd:ServicebdService) { }
     
@@ -20,7 +23,7 @@ export class RegisterPage implements OnInit {
     }
 
     async confirmarRegistro() {
-        if(this.email == "" || this.nombre.trim() == "" || this.pass1 == "" || this.pass2 == "") {
+        if(this.email == "" || this.nombre.trim() == "" || this.pass1 == "" || this.pass2 == "" || this.respuesta.trim() == "") {
             this.bd.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
             return;
         }
@@ -48,7 +51,7 @@ export class RegisterPage implements OnInit {
             return;
         }
 
-        await this.bd.usuarioRegistrar(this.nombre, this.email, this.pass1);
+        await this.bd.usuarioRegistrar(this.nombre, this.email, this.pass1, this.pregunta, this.respuesta);
         this.router.navigate(['/home']);
     }
 }

@@ -25,10 +25,25 @@
         <ion-item>
             <ion-input [(ngModel)]="pass1" label="Contraseña" type="password" labelPlacement="stacked" placeholder="Ingrese contraseña..."></ion-input>
         </ion-item>
-        
         <ion-item>
             <ion-input [(ngModel)]="pass2" label="Confirmar Contraseña" type="password" labelPlacement="stacked" placeholder="Confirme su contraseña..."></ion-input>
         </ion-item>
+        <br>
+
+        <!-- pregunta de seguridad -->
+        <ion-label color="warning">Esto es permanente.<br>Asegúrese de su pregunta y respuesta.</ion-label>
+        <ion-item>
+            <ion-select [(ngModel)]="pregunta" label="Pregunta de Seguridad" label-placement="stacked">
+              <ion-select-option value="0">¿Cual fue/es el nombre de tu primera mascota?</ion-select-option>
+              <ion-select-option value="1">¿Cual es tu sabor de helado favorito?</ion-select-option>
+              <ion-select-option value="2">¿Donde conociste a tu mejor amigo?</ion-select-option>
+              <ion-select-option value="3">¿Cual es tu album musical favorito?</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-input [(ngModel)]="respuesta" label="Respuesta" labelPlacement="stacked" placeholder="Ingrese su respuesta..."></ion-input>
+        </ion-item>
+
         <br>
         <ion-button (click)="confirmarRegistro()" class="boton-azul" size="large">Registrar</ion-button>
     </div>

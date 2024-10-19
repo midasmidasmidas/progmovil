@@ -60,6 +60,7 @@ export class EditarPage implements OnInit, ViewWillEnter {
 
         if(this.usuarioActual && this.camara.imageSrc) {
             this.bd.usuarioEditar(this.nombre, this.email, this.usuarioActual.user_pass, this.camara.imageSrc, this.usuarioActual.user_id);
+            this.bd.presentAlert("Éxito", "Perfil editado.");
             this.router.navigate(['/cuenta']);
         } else {
             this.bd.presentAlert("Datos no cargados", "Espere un momento antes de guardar los cambios");
