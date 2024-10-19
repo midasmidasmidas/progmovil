@@ -1,0 +1,30 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-title>Pasarela de Pago</ion-title>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <div class="form-centrada">
+        <ion-item>
+            <ion-input [(ngModel)]="tarj_nombre" label="Nombre en Tarjeta" labelPlacement="stacked" placeholder="Ingrese nombre..."></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-input [(ngModel)]="tarj_numero" label="Número de Tarjeta" labelPlacement="stacked" placeholder="Ingrese solo el numero, sin espacios..." type="number"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-input [(ngModel)]="tarj_cvv" label="CVV/CVC de Tarjeta" labelPlacement="stacked" placeholder="Ingrese CVV/CVC..." type="number"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-input [(ngModel)]="tarj_fechaAA" label="Año (Últimos 2 Digitos)" labelPlacement="stacked" placeholder="Ex. 01"></ion-input>
+            <ion-input [(ngModel)]="tarj_fechaMM" label="Mes (01-12)" labelPlacement="stacked" placeholder="Ex. 01"></ion-input>
+        </ion-item>
+        <br>
+        
+        <ion-button (click)="checkPasarela()" class="boton-azul" size="large">Confirmar Compra</ion-button>
+    </div>
+</ion-content>

@@ -35,7 +35,7 @@ export class CarritoPage implements OnInit {
     
     ngOnInit() {
         this.iniciarCarrito();
-
+        
         this.bd.fetchUsuarioActual().subscribe(user => {
             this.usuarioActual = user;
         });
@@ -71,7 +71,7 @@ export class CarritoPage implements OnInit {
         if(carritoIndex !== -1) {
             this.carrito.splice(carritoIndex, 1);
             this.carritoIDs.splice(carritoIndex, 1);
-
+            
             this.precioTotal -= precio;
             
             this.nativeStorage.setItem("carrito", { array: this.carritoIDs })
@@ -81,22 +81,17 @@ export class CarritoPage implements OnInit {
             );
         }
     }
-    
-    confirmarCompra() {
-        this.carritoIDs.forEach(async id => {
-            const producto = await this.bd.consultarProductoPorId(id.toString());
-            if(producto && this.usuarioActual) {
-                let fechaFormateada:string = this.bd.formatearFechaActual();
-                this.bd.insertarCompra(producto.pr_id, producto.pr_precio, fechaFormateada, this.usuarioActual.user_id);
-                
-                // vaciar carrito al comprar
-                this.carrito = [];
-                this.carritoIDs = [];
-                this.nativeStorage.setItem("carrito", { array: [] })
+   
+   irPasarela() {
+        let navExtras: NavigationExtras = {
+            state:{
+                carrito: this.carrito,
+                carritoIDs: this.carritoIDs,
+                usuarioActual: this.usuarioActual,
             }
-        });
-
-        this.bd.presentAlert("Compra", "Compra completada con éxito");
+        }
+        
+        this.router.navigate(['/pasarela'], navExtras);
     }
     
     irProducto(x:any)
@@ -109,5 +104,4 @@ export class CarritoPage implements OnInit {
         
         this.router.navigate(['/producto'], navExtras);
     }
-    
 }

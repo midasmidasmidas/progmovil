@@ -40,6 +40,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/admin/edit-ropa/edit-ropa.module').then( m => m.EditRopaPageModule)
   },
   {
+    path: 'pasarela',
+    loadChildren: () => import('./pages/pasarela/pasarela.module').then( m => m.PasarelaPageModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
   },
