@@ -88,7 +88,7 @@ export class PasswordRecuperarPage implements OnInit {
             if(this.correoVerificado) {
                 this.bd.usuarioEditar(this.usuarioActual.user_nombre, this.usuarioActual.user_correo, this.pass1, this.usuarioActual.user_foto, this.usuarioActual.user_id);
                 this.bd.presentAlert("Éxito", "Contraseña Recuperada.");
-                this.router.navigate(['/home']);
+                this.router.navigate(['/login']);
             } else {
                 this.bd.presentAlert("Correo Invalido", "Ingrese el correo del que quiera recuperar la contraseña.");
             }
