@@ -13,20 +13,12 @@ export class HistorialPage implements OnInit {
     historial: any = [
         {
             pr_id: 1,
-            pr_nombre: "Kill 'Em All",
-            pr_tipo: "Polerón",
-            pr_marca: "Metallica",
-            pr_precio: 14000,
-            pr_imagen: "assets/img/productos/placeholder1.webp",
+            pr_nombre: "Cargando...",
+            pr_tipo: "Cargando...",
+            pr_marca: "",
+            pr_precio: 0,
+            pr_imagen: "",
         },
-        {
-            pr_id: 2,
-            pr_nombre: "Hola",
-            pr_tipo: "AAAAA",
-            pr_marca: "Metallica",
-            pr_precio: 12000,
-            pr_imagen: "assets/img/productos/placeholder2.webp",
-        }
     ] 
 
     usuarioActual:Usuarios | null = null;
