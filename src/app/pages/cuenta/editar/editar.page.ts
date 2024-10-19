@@ -41,7 +41,7 @@ export class EditarPage implements OnInit, ViewWillEnter {
     }
     
     async validarEditar() {
-        if(this.nombre == "" || this.email == "") {
+        if(this.nombre.trim() == "" || this.email == "") {
             this.bd.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
             return;
         }

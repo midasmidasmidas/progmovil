@@ -26,7 +26,7 @@ export class LoginPage implements OnInit {
         if(this.isLoggingIn) return; // no intentar el login multiples veces
         this.isLoggingIn = true;
 
-        if(this.email == "" || this.nombre == "" || this.pass1 == "") {
+        if(this.email == "" || this.nombre.trim() == "" || this.pass1 == "") {
             this.bd.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
             this.isLoggingIn = false;
             return;

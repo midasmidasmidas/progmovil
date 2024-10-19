@@ -20,7 +20,7 @@ export class RegisterPage implements OnInit {
     }
 
     async confirmarRegistro() {
-        if(this.email == "" || this.nombre == "" || this.pass1 == "" || this.pass2 == "") {
+        if(this.email == "" || this.nombre.trim() == "" || this.pass1 == "" || this.pass2 == "") {
             this.bd.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
             return;
         }

@@ -35,7 +35,7 @@ export class AddRopaPage implements OnInit {
     }
     
     validarProducto() {
-        if(this.producto.pr_imagen == "" || this.producto.pr_nombre == "" || this.producto.pr_marca == "" || this.producto.pr_tipo == "") {
+        if(this.producto.pr_imagen.trim() == "" || this.producto.pr_nombre.trim() == "" || this.producto.pr_marca.trim() == "" || this.producto.pr_tipo.trim() == "") {
             this.bd.presentAlert("Datos Inválidos", "Los datos no pueden estar vacíos.");
             return;
         }
