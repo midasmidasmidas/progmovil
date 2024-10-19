@@ -54,6 +54,14 @@
                     Cambiar Contraseña
                 </ion-button>
             </ion-item>
+            <ion-item>
+                <ion-buttons>
+                    <ion-button style="background-color: red;" (click)="borrarCuenta()" size="medium">
+                        <ion-icon style="color: white;" slot="start" name="close"></ion-icon>
+                        Eliminar Cuenta
+                    </ion-button>
+                </ion-buttons>
+            </ion-item>
         </ion-list>
         
         <div *ngIf="usuarioActual?.user_tipo == 2">

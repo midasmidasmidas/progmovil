@@ -6,6 +6,7 @@ import { AlertController, Platform } from '@ionic/angular';
 import { Compras } from './compras';
 import { Usuarios } from './usuarios';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -34,7 +35,7 @@ export class ServicebdService {
     
     private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
     
-    constructor(private sqlite: SQLite, private platform: Platform, private alertController: AlertController, private nativeStorage:NativeStorage) {
+    constructor(private sqlite: SQLite, private platform: Platform, private alertController: AlertController, private nativeStorage:NativeStorage, private router:Router) {
         this.crearBD();
     }
 
@@ -128,6 +129,8 @@ export class ServicebdService {
         await this.nativeStorage.setItem("user_id", 0);
         
         this.listadoUsuarioActual.next({ user_id: 0, user_tipo: 1, user_nombre: "", user_correo: "", user_pass: "", user_foto: "" });
+
+        this.router.navigate(['/home']);
     }
     
     consultarProductos(){
@@ -302,6 +305,15 @@ export class ServicebdService {
         }).catch(e=>{
             this.presentAlert("Eliminar", "Error: " + JSON.stringify(e));
         })
+    }
+
+    async eliminarUsuario(id:string){
+        try {
+            const res = await this.database.executeSql('DELETE FROM usuario WHERE user_id = ?', [id]);
+            this.presentAlert("Éxito", "Cuenta Eliminada");
+        } catch (e) {
+            this.presentAlert("Error", "Error al eliminar cuenta: " + JSON.stringify(e));
+        }
     }
     
     insertarProducto(nombre:string, tipo: string, marca:string, precio:number, imagen:string){
