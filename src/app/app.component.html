@@ -29,10 +29,6 @@
                             <ion-icon name="heart"></ion-icon>
                             <ion-label>Lista de Deseados</ion-label>
                         </ion-item>
-                        <ion-item [routerDirection]="'root'" (click)="cerrarSesion()">
-                            <ion-icon name="log-in"></ion-icon>
-                            <ion-label>Cerrar Sesion</ion-label>
-                        </ion-item>
                     </div>
                     <div *ngIf="!bd.user_logged">
                         <ion-item>

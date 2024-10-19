@@ -46,12 +46,18 @@
             </ion-item>
         </ion-list>
         
-        <h5><b>Privacidad</b></h5>
+        <h5><b>Privacidad & Otros</b></h5>
         <ion-list>
             <ion-item>
                 <ion-button class="boton-azul" [routerLink]="'/cuenta/password-cambio'" size="medium">
                     <ion-icon slot="start" name="person"></ion-icon>
                     Cambiar Contraseña
+                </ion-button>
+            </ion-item>
+            <ion-item>
+                <ion-button class="boton-azul" (click)="cerrarSesion()" size="medium">
+                    <ion-icon slot="start" name="log-in"></ion-icon>
+                    Cerrar Sesion
                 </ion-button>
             </ion-item>
             <ion-item>

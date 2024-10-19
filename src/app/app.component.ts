@@ -10,11 +10,6 @@ import { ServicebdService } from './services/servicebd.service';
 })
 export class AppComponent {
     
-    constructor(private router:Router, public bd:ServicebdService) {
-    }
+    constructor(public bd:ServicebdService) {}
 
-    async cerrarSesion() {
-        await this.bd.cerrarSesion();
-        this.router.navigate(['/home']);
-    }
 }

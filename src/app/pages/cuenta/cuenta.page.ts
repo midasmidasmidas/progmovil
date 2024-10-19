@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { AlertController, ViewWillEnter } from '@ionic/angular';
 import { CamaraService } from 'src/app/services/camara.service';
@@ -16,7 +17,7 @@ export class CuentaPage implements ViewWillEnter, OnInit {
 
     usuarioActual:Usuarios | null = null;
     
-    constructor(public camara: CamaraService, private bd:ServicebdService, private nativeStorage:NativeStorage, private alertController:AlertController) {
+    constructor(public camara: CamaraService, private bd:ServicebdService, private nativeStorage:NativeStorage, private alertController:AlertController, private router:Router) {
     }
     
     ionViewWillEnter(){
@@ -30,6 +31,11 @@ export class CuentaPage implements ViewWillEnter, OnInit {
     }
 
     async cargarDatosDeUsuario() {
+        if(!this.bd.user_logged)
+        {
+            this.router.navigate(['/home']);
+        }
+
         this.loading = true;
         try {
             const userID = await this.nativeStorage.getItem("user_id");
@@ -60,5 +66,9 @@ export class CuentaPage implements ViewWillEnter, OnInit {
         });
         
         await alert.present();
+    }
+    
+    async cerrarSesion() {
+        await this.bd.cerrarSesion();
     }
 }
