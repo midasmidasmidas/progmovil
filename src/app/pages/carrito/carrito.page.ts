@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
+import { ViewWillEnter } from '@ionic/angular';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 import { Usuarios } from 'src/app/services/usuarios';
 
@@ -9,7 +10,7 @@ import { Usuarios } from 'src/app/services/usuarios';
     templateUrl: './carrito.page.html',
     styleUrls: ['./carrito.page.scss'],
 })
-export class CarritoPage implements OnInit {
+export class CarritoPage implements OnInit, ViewWillEnter {
     
     carrito: any = [
         {
@@ -39,6 +40,10 @@ export class CarritoPage implements OnInit {
         this.bd.fetchUsuarioActual().subscribe(user => {
             this.usuarioActual = user;
         });
+    }
+
+    ionViewWillEnter(){
+        this.iniciarCarrito();
     }
     
     async iniciarCarrito() {

@@ -90,7 +90,7 @@ export class PasarelaPage implements OnInit {
         }, 1.75 * 1000);
     }
     
-    confirmarCompra() {
+    async confirmarCompra() {
         this.carritoIDs.forEach(async id => {
             const producto = await this.bd.consultarProductoPorId(id.toString());
             if(producto && this.usuarioActual) {
@@ -102,7 +102,7 @@ export class PasarelaPage implements OnInit {
         // vaciar carrito al comprar
         this.carrito = [];
         this.carritoIDs = [];
-        this.nativeStorage.setItem("carrito", { array: [] })
+        await this.nativeStorage.setItem("carrito", { array: [] })
         
         this.bd.presentAlert("Compra", "Compra completada con éxito");
     }
