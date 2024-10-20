@@ -23,9 +23,6 @@ export class PasswordRecuperarPage implements OnInit {
     constructor(private router:Router, private bd:ServicebdService) { }
     
     ngOnInit() {
-        this.bd.fetchUsuarioActual().subscribe(user => {
-            this.usuarioActual = user;
-        });
     }
 
     async validarCorreo() {
@@ -34,9 +31,9 @@ export class PasswordRecuperarPage implements OnInit {
             this.correoVerificado = false;
             this.pregunta = "Ingrese su correo primero.";
         } else {
-            const user = await this.bd.consultarUsuarioPorCorreo(this.email);
-            if(user) {
-                this.pregunta = this.bd.preguntas[user!.user_pregunta];
+            this.usuarioActual = await this.bd.consultarUsuarioPorCorreo(this.email);
+            if(this.usuarioActual) {
+                this.pregunta = this.bd.preguntas[this.usuarioActual!.user_pregunta];
                 this.correoVerificado = true;
             } else {
                 this.pregunta = "Ingrese su correo primero.";
@@ -56,9 +53,9 @@ export class PasswordRecuperarPage implements OnInit {
             this.bd.presentAlert("Correo Inválido", "Se ha ingresado un correo con formato inválido. Intentelo de nuevo.");
             return;
         } else {
-            const user = await this.bd.consultarUsuarioPorCorreo(this.email);
-            if(user) {
-                this.pregunta = this.bd.preguntas[user!.user_pregunta];
+            this.usuarioActual = await this.bd.consultarUsuarioPorCorreo(this.email);
+            if(this.usuarioActual) {
+                this.pregunta = this.bd.preguntas[this.usuarioActual!.user_pregunta];
                 this.correoVerificado = true;
             } else {
                 this.pregunta = "Ingrese su correo primero.";
