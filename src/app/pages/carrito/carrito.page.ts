@@ -35,8 +35,6 @@ export class CarritoPage implements OnInit, ViewWillEnter {
     }
     
     ngOnInit() {
-        this.iniciarCarrito();
-        
         this.bd.fetchUsuarioActual().subscribe(user => {
             this.usuarioActual = user;
         });
@@ -71,13 +69,13 @@ export class CarritoPage implements OnInit, ViewWillEnter {
         }
     }
     
-    removerDeCarrito(idRemover:number, precio:number) {
-        const carritoIndex = this.carrito.findIndex((product: { pr_id: number; }) => product.pr_id === idRemover);
+    removerDeCarrito(x:any) {
+        const carritoIndex = this.carrito.findIndex((product: { pr_id: number; }) => product.pr_id === x.pr_id);
         if(carritoIndex !== -1) {
             this.carrito.splice(carritoIndex, 1);
             this.carritoIDs.splice(carritoIndex, 1);
-            
-            this.precioTotal -= precio;
+                
+            this.precioTotal -= x.pr_precio;
             
             this.nativeStorage.setItem("carrito", { array: this.carritoIDs })
             .then(
