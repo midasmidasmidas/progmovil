@@ -44,9 +44,9 @@ export class CarritoPage implements OnInit {
     async iniciarCarrito() {
         this.loading = true;
         try {
-            const data = await this.nativeStorage.getItem("carrito");
-            const invalidas:number[] = []; // las que hacen referencia a un producto que ya no esta en la base de datos (removido, cambio de id, etc)
             this.carrito = [];
+            const data = await this.nativeStorage.getItem("carrito").catch(() => []);
+            const invalidas:number[] = []; // las que hacen referencia a un producto que ya no esta en la base de datos (removido, cambio de id, etc)
             this.carritoIDs = data.array || [];
             this.precioTotal = 0;
             await Promise.all(this.carritoIDs.map(async (id) => {
