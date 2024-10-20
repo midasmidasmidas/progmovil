@@ -25,6 +25,6 @@
         </ion-item>
         <br>
         
-        <ion-button (click)="checkPasarela()" class="boton-azul" size="large">Confirmar Compra</ion-button>
+        <ion-button (click)="checkPasarela()" [disabled]="procesando" class="boton-azul" size="large">Confirmar Compra</ion-button>
     </div>
 </ion-content>

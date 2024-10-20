@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
-import { AlertController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 import { Usuarios } from 'src/app/services/usuarios';
 
@@ -11,7 +11,7 @@ import { Usuarios } from 'src/app/services/usuarios';
     styleUrls: ['./pasarela.page.scss'],
 })
 export class PasarelaPage implements OnInit {
-
+    
     carrito: any = [
         {
             pr_id: 1,
@@ -33,7 +33,9 @@ export class PasarelaPage implements OnInit {
     tarj_fechaMM:string = "";
     tarj_fechaAA:string = "";
     
-    constructor(private bd:ServicebdService, private activedroute:ActivatedRoute, private router:Router, private nativeStorage:NativeStorage) {
+    procesando:boolean = false;
+    
+    constructor(private bd:ServicebdService, private activedroute:ActivatedRoute, private router:Router, private nativeStorage:NativeStorage, private toastController:ToastController) {
         this.activedroute.queryParams.subscribe(param =>{
             if(this.router.getCurrentNavigation()?.extras.state){
                 this.carrito = this.router.getCurrentNavigation()?.extras?.state?.['carrito'];
@@ -41,15 +43,26 @@ export class PasarelaPage implements OnInit {
                 this.usuarioActual = this.router.getCurrentNavigation()?.extras?.state?.['usuarioActual'];
             }
         });
+
+        this.checkRedireccion();
     }
     
     ngOnInit() {
     }
+
+    async checkRedireccion() {
+        const data = await this.nativeStorage.getItem("carrito").catch(() => []);
+        if(data.array.length < 1) {
+            this.router.navigate(['/carrito']);
+        }
+    }
     
     checkPasarela() {
+        this.procesando = true;
         if(this.tarj_nombre == "")
         {
             this.bd.presentAlert("Datos Inválidos", "El nombre no puede estar vacío.");
+            this.procesando = false;
             return;
         }
         
@@ -57,6 +70,7 @@ export class PasarelaPage implements OnInit {
         if(!numeroRegex.test(this.tarj_numero.toString()))
         {
             this.bd.presentAlert("Datos Inválidos", "El numero debe ser de minimo 8 digitos, y maximo 16, sin guiones ni espacios.");
+            this.procesando = false;
             return;
         }
         
@@ -66,6 +80,7 @@ export class PasarelaPage implements OnInit {
         if(!cvvRegex.test(this.tarj_cvv.toString()))
         {
             this.bd.presentAlert("Datos Inválidos", "El CVV/CVC debe ser de 3 digitos. (En ocaciones especiales, 4)");
+            this.procesando = false;
             return;
         }
         
@@ -73,6 +88,7 @@ export class PasarelaPage implements OnInit {
         if(!yearRegex.test(this.tarj_fechaAA))
         {
             this.bd.presentAlert("Datos Inválidos", "El año debe ser solo los ultimos 2 digitos.");
+            this.procesando = false;
             return;
         }
         
@@ -80,10 +96,11 @@ export class PasarelaPage implements OnInit {
         if(!monthRegex.test(this.tarj_fechaMM))
         {
             this.bd.presentAlert("Datos Inválidos", "El mes debe ser entre 01 a 12.");
+            this.procesando = false;
             return;
         }
         
-        this.bd.presentAlert("Procesando Compra", "Esto puede tardar un poco...");
+        this.presentToast("bottom", "Procesando Compra. Esto puede tardar un poco...");
         
         setTimeout(() => {
             this.confirmarCompra();
@@ -91,20 +108,37 @@ export class PasarelaPage implements OnInit {
     }
     
     async confirmarCompra() {
-        this.carritoIDs.forEach(async id => {
-            const producto = await this.bd.consultarProductoPorId(id.toString());
-            if(producto && this.usuarioActual) {
-                let fechaFormateada:string = this.bd.formatearFechaActual();
-                this.bd.insertarCompra(producto.pr_id, producto.pr_precio, fechaFormateada, this.usuarioActual.user_id);
+        try {
+            for(const id of this.carritoIDs) {
+                const producto = await this.bd.consultarProductoPorId(id.toString());
+                if(producto && this.usuarioActual) {
+                    let fechaFormateada: string = this.bd.formatearFechaActual();
+                    await this.bd.insertarCompra(producto.pr_id, producto.pr_precio, fechaFormateada, this.usuarioActual.user_id);
+                }
             }
+            
+            // vaciar carrito al comprar
+            this.carrito = [];
+            this.carritoIDs = [];
+            await this.nativeStorage.setItem("carrito", { array: [] });
+            
+            this.bd.presentAlert("Compra", "Compra completada con éxito");
+            this.router.navigate(['/home']);
+        } catch(e) {
+            this.bd.presentAlert("Compra", "Ocurrió un error al completar la compra.");
+        } finally {
+            this.procesando = false;
+        }
+    }
+    
+    async presentToast(position: 'top' | 'middle' | 'bottom', msg:string) {
+        const toast = await this.toastController.create({
+            message: msg,
+            duration: 1700,
+            position: position,
         });
         
-        // vaciar carrito al comprar
-        this.carrito = [];
-        this.carritoIDs = [];
-        await this.nativeStorage.setItem("carrito", { array: [] })
-        
-        this.bd.presentAlert("Compra", "Compra completada con éxito");
+        await toast.present();
     }
     
 }
