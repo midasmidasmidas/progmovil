@@ -49,18 +49,15 @@ export class WishlistPage implements OnInit {
         }
     }
 
-    removerDeWishlist(idRemover:number) {
-        const carritoIndex = this.wishlist.findIndex((product: { pr_id: number; }) => product.pr_id === idRemover);
-        if(carritoIndex !== -1) {
-            this.wishlist.splice(carritoIndex, 1);
-            this.wishlistIDs.splice(carritoIndex, 1);
+    async removerDeWishlist(x:any) {
+        this.wishlist = this.wishlist.filter((product: { pr_id: number; }) => product.pr_id !== x.pr_id);
+        this.wishlistIDs = this.wishlistIDs.filter((id: number) => id !== x.pr_id);
 
-            this.nativeStorage.setItem("wishlist", { array: this.wishlistIDs })
-            .then(
-                () => this.bd.presentAlert("Lista de Deseados", "Producto eliminado de lista de deseados"),
-                e => this.bd.presentAlert("Lista de Deseados", "Error consiguiendo lista de deseados: " + JSON.stringify(e))
-            );
-        }
+        await this.nativeStorage.setItem("wishlist", { array: this.wishlistIDs })
+        .then(
+            () => this.bd.presentAlert("Lista de Deseados", "Producto eliminado de lista de deseados"),
+            e => this.bd.presentAlert("Lista de Deseados", "Error consiguiendo lista de deseados: " + JSON.stringify(e))
+        );
     }
 
     irProducto(x:any)
