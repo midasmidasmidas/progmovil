@@ -40,7 +40,7 @@ export class ServicebdService {
     
     tablaUsuario: string = "CREATE TABLE IF NOT EXISTS usuario(user_id INTEGER PRIMARY KEY autoincrement, user_tipo INTEGER NOT NULL, user_nombre TEXT NOT NULL, user_correo TEXT NOT NULL UNIQUE, user_pass TEXT NOT NULL, user_foto TEXT, user_pregunta INTEGER NOT NULL, user_respuesta TEXT NOT NULL);";
     registroUsuario: string[] = [
-        "INSERT or IGNORE INTO usuario(user_id, user_tipo, user_nombre, user_correo, user_pass, user_foto, user_pregunta, user_respuesta) VALUES (1, 1, 'james', 'user@usuario.com', 'UserPass1!', 'https://darak0z.github.io/img/smirnov/smirnov_thumbsUp.png', 0, 'rocco');",
+        "INSERT or IGNORE INTO usuario(user_id, user_tipo, user_nombre, user_correo, user_pass, user_foto, user_pregunta, user_respuesta) VALUES (1, 1, 'james', 'user@usuario.com', 'UserPass1!', 'https://darak0z.github.io/img/smirnov/favicon1.png', 0, 'rocco');",
         "INSERT or IGNORE INTO usuario(user_id, user_tipo, user_nombre, user_correo, user_pass, user_pregunta, user_respuesta) VALUES (2, 2, 'admin', 'admin@usuario.com', 'AdminPass1!', 1, 'vainilla');",
     ]
     listadoUsuarioActual = new BehaviorSubject<Usuarios>({ user_id: 0, user_tipo: 1, user_nombre: "", user_correo: "", user_pass: "", user_foto: "", user_pregunta: 0, user_respuesta: "" }); // solo se guarda el actual. no se necesita guardar TODOS los usuarios.
