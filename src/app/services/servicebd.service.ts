@@ -415,6 +415,6 @@ export class ServicebdService {
         const hora = String(fechaActual.getHours()).padStart(2, '0');
         const minuto = String(fechaActual.getMinutes()).padStart(2, '0');
         
-        return `${dia}/${mes}/${anho} ${hora}:${minuto} UTC`;
+        return `${dia}/${mes}/${anho} ${hora}:${minuto}`;
     }
 }
